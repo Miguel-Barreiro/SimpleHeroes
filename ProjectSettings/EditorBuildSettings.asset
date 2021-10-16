@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/HeroSelection.unity
+    guid: 50a766a2e93d9d24b99c215b9ff8a2f8
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: ae71f06165dab3b48b18a67d45ccd37b
+  - enabled: 1
+    path: Assets/Scenes/Battle.unity
+    guid: 85c312202144f504b8ae829a109041f7
   m_configObjects: {}
