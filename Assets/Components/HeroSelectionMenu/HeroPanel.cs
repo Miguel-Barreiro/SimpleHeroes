@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Battle.Heroes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,41 +8,28 @@ namespace HeroSelectionMenu
 {
     public class HeroPanel : MonoBehaviour
     {
-
-        
         
         [SerializeField]
         private Image PanelImage;
         
-        private Coroutine _holdCoroutine = null;
-        
-        public void OnPointerDown() {
-            Debug.Log("on point down");
-            if(_holdCoroutine == null)
-            {
-                _holdCoroutine = StartCoroutine(HoldCoroutineUtility());
-            }
-
-            PanelImage.color = Color.white;
-            
+        public void SetHero(CharacterConfiguration config) {
+            PanelImage.sprite = config.HeroPortrait;
         }
 
-        private IEnumerator HoldCoroutineUtility() {
-
-            float deltaTime = 0;
-            while (deltaTime < 3) {
-                deltaTime += Time.deltaTime;
-                yield return null;
-            }
-            _holdCoroutine = null;
-            yield return null;
+        public void SetEmpty() {
+            PanelImage.sprite = _emptyImage;
         }
 
-        public void OnClick() {
-            if (_holdCoroutine != null) {
-                StopCoroutine(_holdCoroutine);
-                _holdCoroutine = null;
-            }
+        public void SetSelected(bool selected) {
+            PanelImage.color = selected ? Color.white : _notSelectedColor;
         }
+
+        private Color _notSelectedColor;
+        private Sprite _emptyImage;
+        private void Awake() {
+            _notSelectedColor = PanelImage.color;
+            _emptyImage = PanelImage.sprite;
+        }
+
     }
 }

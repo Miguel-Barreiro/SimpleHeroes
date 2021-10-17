@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1991333761582171226}
   - component: {fileID: 8333829276143693316}
   - component: {fileID: 1980848946915229417}
+  - component: {fileID: 2039224140334208226}
   m_Layer: 5
   m_Name: SelectableHeroPanel
   m_TagString: Untagged
@@ -71,7 +72,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb42c2cc68954101aa7e83f4c0e68f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PanelImage: {fileID: 7478527266036312538}
+  PanelImage: {fileID: 2468517199234829754}
+--- !u!114 &2039224140334208226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6722313107049166573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7445e933edfd4154b8f6f46f6ee91725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7478527266036312536
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +177,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1980848946915229417}
+        - m_Target: {fileID: 2039224140334208226}
           m_MethodName: OnClick
           m_Mode: 1
           m_Arguments:
@@ -179,7 +192,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1980848946915229417}
+        - m_Target: {fileID: 2039224140334208226}
           m_MethodName: OnPointerDown
           m_Mode: 1
           m_Arguments:
@@ -254,7 +267,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7b7864b3869bc4cce926ce297d94b552, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7f12279858f3dc242b03d2fa366acc50, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
