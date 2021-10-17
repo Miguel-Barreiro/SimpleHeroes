@@ -1,9 +1,7 @@
 using System;
-using Battle.Heroes;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Model
+namespace Gram.Model
 {
     [Serializable]
     public class Hero

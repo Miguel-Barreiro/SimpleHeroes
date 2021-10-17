@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Battle.Heroes
+namespace Gram.Core
 {
     [CreateAssetMenu(fileName = "CharacterConfiguration", menuName = "Character Configuration", order = 0)]
     public class CharacterConfiguration : ScriptableObject
@@ -11,7 +10,7 @@ namespace Battle.Heroes
         public GameObject BattlePrefab;
         public Vector3 Scale;
 
-        public string Name;
+        public string Id;
         public int InitialHealth;
         public int InitialAttackPower;
 

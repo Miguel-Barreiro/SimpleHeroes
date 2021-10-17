@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Battle.Heroes;
-using HeroSelectionMenu;
-using Model;
+using Gram.Core;
+using Gram.HeroSelectionMenu;
+using Gram.Model;
+using Gram.Utils;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 
-namespace Game
+namespace Gram.Game
 {
     public class HeroSelectionMenuController : MonoBehaviour
     {
@@ -20,26 +20,36 @@ namespace Game
         private void Start() {
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
             _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<CharacterDatabase>();
-            _gameModel.OnHeroCollectionChange += SetupHeroPanels;
+            _gameModel.OnHeroCollectionChange += UpdateHeroPanels;
 
-            _gameModel.OnLogicStateChange +=OnLogicStateChange;
+            _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
+
+            int panelIndex = 0;
+            foreach (HeroPanel heroPanel in HeroPanels) {
+                int heroIndex = panelIndex;
+                heroPanel.OnSelect += selected => {
+                    Debug.Log("heroPanel.OnSelect " + heroIndex);
+                    _gameModel.TrySelectHero(heroIndex);
+                };
+                panelIndex++;
+            }
         }
 
         private void UpdateHeroSelection() {
-            GameState gameState = _gameModel.GetGameState();
+            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
             int i = 0;
             foreach (HeroPanel heroPanel in HeroPanels) {
-                heroPanel.SetSelected(gameState.SelectedHeroes.Contains(i));
+                heroPanel.SetSelected(selectedHeroes.Contains(i));
                 i++;
             }
         }
 
         private void OnLogicStateChange() {
-
-            switch (_gameModel.GetGameState().CurrentLogicState) {
+            GameState.GameLogicState logicState = _gameModel.GetCurrentLogicState();
+            switch (logicState) {
                 case GameState.GameLogicState.HeroSelection:
-                    SetupHeroPanels();
+                    UpdateHeroPanels();
                     ShowSelectionMenu();
                     break;
                 case GameState.GameLogicState.Battle:
@@ -57,14 +67,14 @@ namespace Game
             
         }
 
-        private void SetupHeroPanels() {
-            GameState gameState = _gameModel.GetGameState();
-            List<Hero> heroesCollected = gameState.HeroesCollected;
+        private void UpdateHeroPanels() {
+            List<Hero> heroesCollected = _gameModel.GetCollectedHeroes();
+            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
             int i = 0;
             foreach (Hero hero in heroesCollected) {
-                CharacterConfiguration charaterConfig = _characterDatabase.GetHeroCharacterConfigurationByName(hero.CharacterDataName);
+                CharacterConfiguration charaterConfig = _characterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
                 HeroPanels[i].SetHero(charaterConfig);
-                HeroPanels[i].SetSelected(gameState.SelectedHeroes.Contains(i));
+                HeroPanels[i].SetSelected(selectedHeroes.Contains(i));
                 i++;
             }
 

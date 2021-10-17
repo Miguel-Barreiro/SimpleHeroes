@@ -1,8 +1,8 @@
-using Model;
+using Gram.Model;
+using Gram.Utils;
 using UnityEngine;
-using Utils;
 
-namespace Battle
+namespace Gram.Battle
 {
     public class BattleController : MonoBehaviour
     {

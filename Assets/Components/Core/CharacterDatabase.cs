@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Battle.Heroes;
 using UnityEngine;
 
-namespace Game
+namespace Gram.Core
 {
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "CharacterDatabase", order = 0)]
     public class CharacterDatabase : ScriptableObject
@@ -32,12 +31,12 @@ namespace Game
             return result;
         }
 
-        public CharacterConfiguration GetHeroCharacterConfigurationByName(string name) {
-            return HeroCharacters.Find(configuration => configuration.Name.Equals(name));
+        public CharacterConfiguration GetHeroCharacterConfigurationById(string id) {
+            return HeroCharacters.Find(configuration => configuration.Id.Equals(id));
         }
         
-        public CharacterConfiguration GetEnemyCharacterConfigurationByName(string name) {
-            return EnemyCharacters.Find(configuration => configuration.Name.Equals(name));
+        public CharacterConfiguration GetEnemyCharacterConfigurationById(string id) {
+            return EnemyCharacters.Find(configuration => configuration.Id.Equals(id));
         }
         
         

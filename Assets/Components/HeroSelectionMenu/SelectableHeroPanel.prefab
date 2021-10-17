@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1991333761582171226}
   - component: {fileID: 8333829276143693316}
   - component: {fileID: 1980848946915229417}
-  - component: {fileID: 2039224140334208226}
   m_Layer: 5
   m_Name: SelectableHeroPanel
   m_TagString: Untagged
@@ -73,18 +72,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PanelImage: {fileID: 2468517199234829754}
---- !u!114 &2039224140334208226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6722313107049166573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7445e933edfd4154b8f6f46f6ee91725, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7478527266036312536
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +164,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2039224140334208226}
+        - m_Target: {fileID: 1980848946915229417}
           m_MethodName: OnClick
           m_Mode: 1
           m_Arguments:
@@ -192,7 +179,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2039224140334208226}
+        - m_Target: {fileID: 1980848946915229417}
           m_MethodName: OnPointerDown
           m_Mode: 1
           m_Arguments:
@@ -237,8 +224,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1.1100006, y: 1.9199982}
+  m_SizeDelta: {x: -30.125732, y: -30.214783}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3195111078631612649
 CanvasRenderer:

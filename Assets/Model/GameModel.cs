@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Battle.Heroes;
-using Game;
+using Gram.Core;
+using UnityEngine;
 
-namespace Model
+namespace Gram.Model
 {
     public class GameModel
     {
@@ -25,12 +25,17 @@ namespace Model
             _gameDefinitions = gameDefinitions;
         }
 
+        //-------------------------------------------------------------------------------
 
-        public GameState GetGameState() {
-            return _currentState;
+        #region GameState
+
+
+        public string GetSerializedGameState() {
+            return JsonUtility.ToJson(_currentState);
         }
-        public void SetGameState(GameState newGameState) {
-            _currentState = newGameState;
+        public void RestoreGameState(string newGameState) {
+            GameState gameState = JsonUtility.FromJson<GameState>(newGameState);
+            _currentState = gameState;
         }
         public void GenerateInitialGameState() {
 
@@ -43,6 +48,63 @@ namespace Model
 
             GenerateInitialHeroes();
         }
+        
+
+        #endregion
+
+
+        //-------------------------------------------------------------------------------
+
+        #region Hero Collections
+
+        public void TrySelectHero(int heroIndex) {
+            if (_currentState.CurrentLogicState == GameState.GameLogicState.HeroSelection) {
+
+                if (_currentState.SelectedHeroes.Contains(heroIndex)) {
+                    _currentState.SelectedHeroes.Remove(heroIndex);
+                    OnSelectedHeroesChange?.Invoke();
+                } else if( _currentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle){
+                    _currentState.SelectedHeroes.Add(heroIndex);
+                    OnSelectedHeroesChange?.Invoke();
+                }
+            }
+        }
+
+        public List<int> GetSelectedHeroIndexes() {
+            return _currentState.SelectedHeroes;
+        }
+
+        public List<Hero> GetCollectedHeroes() {
+            return _currentState.HeroesCollected;
+        }
+
+        
+        #endregion
+
+
+
+
+        //-------------------------------------------------------------------------------
+
+        #region GameLogic state
+
+        public GameState.GameLogicState GetCurrentLogicState() {
+            return _currentState.CurrentLogicState;
+        }
+        
+
+        public void StartGameLoop() {
+            OnLogicStateChange?.Invoke();
+        }
+
+        #endregion
+
+
+
+
+        //-------------------------------------------------------------------------------
+
+        #region Internal utils
 
         private void GenerateInitialHeroes() {
             
@@ -60,13 +122,13 @@ namespace Model
                 Level = 0,
                 Health = heroCharacter.InitialHealth,
                 AttackPower = heroCharacter.InitialAttackPower,
-                CharacterDataName = heroCharacter.Name
+                CharacterDataName = heroCharacter.Id
             };
             return newHero;
         }
 
-        public void Start() {
-            OnLogicStateChange?.Invoke();
-        }
+        #endregion
+
+
     }
 }

@@ -1,11 +1,10 @@
 using System;
-using Model;
 
-namespace GameSerialization
+namespace Gram.GameSerialization
 {
     public interface IGameSerialization
     {
-        void SaveGame(GameState state, Action doneCallack);
-        void LoadGame(Action<GameState> doneCallack);
+        void SaveGame(string state, Action doneCallack);
+        void LoadGame(Action<string> doneCallack);
     }
 }

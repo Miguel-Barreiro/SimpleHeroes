@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace Gram.Game
 {
     public class SelectableHero : MonoBehaviour
     {
@@ -17,6 +16,9 @@ namespace Game
         private Coroutine _holdCoroutine = null;
     
         public void OnPointerDown() {
+            
+            Debug.Log("OnPointerDown");
+            
             if(_holdCoroutine == null && !_selectedMore)
             {
                 _holdCoroutine = StartCoroutine(HoldCoroutineUtility());
@@ -34,19 +36,20 @@ namespace Game
             _selectedMore = true;
             _holdCoroutine = null;
             OnSelectMore?.Invoke(gameObject);
-            Debug.Log("on hold");
             
             yield return null;
         }
 
         public void OnClick() {
+
+            Debug.Log("onclick");
+            
             if (_holdCoroutine != null) {
                 StopCoroutine(_holdCoroutine);
                 _holdCoroutine = null;
             }
 
             if (!_selectedMore) {
-                Debug.Log("on click");
                 OnSelect?.Invoke(gameObject);
             }
             _selectedMore = false;

@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace Utils.UI
+namespace Gram.Utils.UI
 {
 	//this is a very basic layout just to help if the number of heroes changes.
 	public class SimpleGridLayout : LayoutGroup {

@@ -1,11 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
-using GameSerialization;
-using Model;
+using Gram.GameSerialization;
+using Gram.Model;
+using Gram.Utils;
 using UnityEngine;
-using Utils;
 
-namespace Game
+namespace Gram.Game
 {
     public class GameController : MonoBehaviour
     {
@@ -32,18 +31,18 @@ namespace Game
             _gameSerializationService.LoadGame(state => {
                 if (state == null) {
                     _gameModel.GenerateInitialGameState();
-                    _gameSerializationService.SaveGame(_gameModel.GetGameState(), () => {
-                        _gameModel.Start();
+                    _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
+                        _gameModel.StartGameLoop();
                     });
                 } else {
-                    _gameModel.SetGameState(state);
-                    _gameModel.Start();
+                    _gameModel.RestoreGameState(state);
+                    _gameModel.StartGameLoop();
                 }
             });
         }
 
         private void OnLogicStateGameStateChange() {
-            _gameSerializationService.SaveGame(_gameModel.GetGameState(), () => {
+            _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
                 
             });
         }

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Game;
-using GameSerialization;
-using Model;
+using Gram.Core;
+using Gram.GameSerialization;
+using Gram.Model;
 using UnityEngine;
 using Object = System.Object;
 
-namespace Utils
+namespace Gram.Utils
 {
     
     //seeing we cannot use an external dependency injector I created a very basic one just as an example 

@@ -1,7 +1,7 @@
-using Game;
+using Gram.Game;
 using UnityEngine;
 
-namespace Battle
+namespace Gram.Battle
 {
     public class HeroBattleCharacter : BattleCharacter
     {

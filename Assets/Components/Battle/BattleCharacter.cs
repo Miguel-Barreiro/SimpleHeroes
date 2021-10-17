@@ -1,12 +1,11 @@
-﻿using Battle.Heroes;
-using Game;
-using Model;
+﻿using Gram.Core;
+using Gram.Model;
+using Gram.Utils;
+using Gram.Utils.AnimationUtils;
 using Unity.Mathematics;
 using UnityEngine;
-using Utils;
-using Utils.AnimationUtils;
 
-namespace Battle
+namespace Gram.Battle
 {
     public class BattleCharacter : MonoBehaviour
     {
@@ -26,7 +25,7 @@ namespace Battle
         }
 
         public void Setup(Hero hero) {
-            CharacterConfiguration characterConfiguration = CharacterDatabase.GetHeroCharacterConfigurationByName(hero.CharacterDataName);
+            CharacterConfiguration characterConfiguration = CharacterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
             
             GameObject heroVisual = GameObject.Instantiate(characterConfiguration.BattlePrefab, transform.position, quaternion.identity, transform);
             _endAnimationController = heroVisual.GetComponent<EndAnimationController>(); 

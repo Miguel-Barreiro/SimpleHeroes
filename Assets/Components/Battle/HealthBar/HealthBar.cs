@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Battle
+namespace Gram.Battle
 {
     public class HealthBar : MonoBehaviour
     {

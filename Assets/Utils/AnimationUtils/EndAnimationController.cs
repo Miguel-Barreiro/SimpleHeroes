@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Utils.AnimationUtils
+namespace Gram.Utils.AnimationUtils
 {
     [RequireComponent(typeof(Animator))]
     public class EndAnimationController : MonoBehaviour

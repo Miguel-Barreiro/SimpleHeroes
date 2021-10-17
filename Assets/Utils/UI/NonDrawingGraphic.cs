@@ -1,6 +1,6 @@
 using UnityEngine.UI;
 
-namespace Utils.UI
+namespace Gram.Utils.UI
 {
  
     /// A concrete subclass of the Unity UI `Graphic` class that just skips drawing.

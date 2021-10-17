@@ -1,12 +1,11 @@
-using System;
-using System.Collections;
-using Battle.Heroes;
+using Gram.Core;
+using Gram.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HeroSelectionMenu
+namespace Gram.HeroSelectionMenu
 {
-    public class HeroPanel : MonoBehaviour
+    public class HeroPanel : SelectableHero
     {
         
         [SerializeField]
