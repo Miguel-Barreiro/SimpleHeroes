@@ -26,6 +26,7 @@ namespace Game
             for (int i = 0; i < number; i++) {
                 int index = Random.Range(0, remainingCharacters.Count);
                 result.Add(remainingCharacters[index]);
+                remainingCharacters.RemoveAt(index);
             }
 
             return result;

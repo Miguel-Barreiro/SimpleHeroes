@@ -24,14 +24,24 @@ namespace GameSerialization
             BinaryFormatter bf = new BinaryFormatter();
             string filePath = GetSaveFilePath();
             
-            FileStream file = File.Create(filePath);
+            // FileStream file = File.Create(filePath);
 
             string json = JsonUtility.ToJson(state);
             
-            Debug.Log("SAVE gameState " + json);
+            // Debug.Log("SAVE gameState " + json);
+            //
+            // bf.Serialize(file, json);
+            // file.Close();
+            //
             
-            bf.Serialize(file, json);
-            file.Close();
+            StreamWriter writer = new StreamWriter(filePath, false);
+            writer.WriteLine(json);
+            writer.Close();
+            
+            
+            
+            
+            
             
             doneCallack?.Invoke();
         }
@@ -39,14 +49,24 @@ namespace GameSerialization
         public void LoadGame(Action<GameState> doneCallack) {
             string filePath = GetSaveFilePath();
             if (File.Exists(filePath)) {
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream file = File.Open(filePath, FileMode.Open);
-                string json = (string)bf.Deserialize(file);
+
                 
+                StreamReader reader = new StreamReader(filePath);
+                string json = reader.ReadToEnd();
+                //Print the text from the file
+                Debug.Log("read "  + json);
+                reader.Close();
+
+                
+                
+                // BinaryFormatter bf = new BinaryFormatter();
+                // FileStream file = File.Open(filePath, FileMode.Open);
+                // string json = (string)bf.Deserialize(file);
+                //
                 Debug.Log("LOAD gameState " + json);
                 
                 GameState gameState = JsonUtility.FromJson<GameState>(json);
-                file.Close();
+                // file.Close();
                 doneCallack?.Invoke(gameState);
             } else {
                 doneCallack?.Invoke(null);
