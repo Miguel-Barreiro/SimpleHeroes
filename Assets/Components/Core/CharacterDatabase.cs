@@ -51,6 +51,8 @@ namespace Gram.Core
                 index++;
             }
         }
+
+        //TODO: add easy to access collection for access any config by id
         
     }
 }
