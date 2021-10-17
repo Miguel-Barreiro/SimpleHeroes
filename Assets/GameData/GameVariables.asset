@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: GameVariables
   m_EditorClassIdentifier: 
   InitialNumberHeroes: 3
+  MaximumHeroesInBattle: 3
+  MaximumHeroes: 10

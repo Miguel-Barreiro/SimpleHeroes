@@ -64,7 +64,7 @@ namespace Gram.Model
                     _currentState.SelectedHeroes.Remove(heroIndex);
                     OnSelectedHeroesChange?.Invoke();
                 } else if( _currentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle &&
-                           heroIndex < _currentState.HeroesCollected.Count &&  heroIndex > 0){
+                           heroIndex < _currentState.HeroesCollected.Count &&  heroIndex >= 0){
                     _currentState.SelectedHeroes.Add(heroIndex);
                     OnSelectedHeroesChange?.Invoke();
                 }
@@ -97,6 +97,12 @@ namespace Gram.Model
         public void StartGameLoop() {
             OnLogicStateChange?.Invoke();
         }
+
+        public void GoToBattle() {
+            _currentState.CurrentLogicState = GameState.GameLogicState.Battle;
+            OnLogicStateChange?.Invoke();
+        }
+
 
         #endregion
 

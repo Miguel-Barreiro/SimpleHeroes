@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Gram.Core
 {
@@ -38,7 +39,18 @@ namespace Gram.Core
         public CharacterConfiguration GetEnemyCharacterConfigurationById(string id) {
             return EnemyCharacters.Find(configuration => configuration.Id.Equals(id));
         }
-        
+
+        private void OnValidate() {
+            int index = 0;
+            foreach (CharacterConfiguration characterConfiguration in HeroCharacters) {
+                List<CharacterConfiguration> similarIds = HeroCharacters.FindAll(configuration => configuration.Id == characterConfiguration.Id);
+                if (similarIds.Count > 1) {
+                    Debug.LogError("non unique id found for " + characterConfiguration.Id + " in " + index);
+                }
+
+                index++;
+            }
+        }
         
     }
 }

@@ -1,9 +1,8 @@
 using Gram.Core;
-using Gram.Game;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Gram.HeroSelectionMenu
+namespace Gram.HeroSelectionMenu.HeroPanels
 {
     public class HeroPanel : SelectableHero
     {
