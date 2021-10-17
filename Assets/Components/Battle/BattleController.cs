@@ -6,10 +6,16 @@ namespace Gram.Battle
 {
     public class BattleController : MonoBehaviour
     {
-        private GameModel _gameModel;
+        private IGameModel _gameModel;
         
         private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
         }
+
+
+        public void GoBackMenuSelection() {
+            _gameModel.Retreat();
+        }
+        
     }
 }

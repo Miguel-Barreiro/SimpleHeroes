@@ -18,10 +18,10 @@ namespace Gram.Battle
         
 
         private EndAnimationController _endAnimationController;
-        protected CharacterDatabase CharacterDatabase;
+        protected ICharacterDatabase CharacterDatabase;
         
         protected void Start() {
-            CharacterDatabase = BasicDependencyInjector.Instance().GetObjectByType<CharacterDatabase>();
+            CharacterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
         }
 
         public void Setup(Hero hero) {

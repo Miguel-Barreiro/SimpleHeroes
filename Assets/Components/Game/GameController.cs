@@ -10,11 +10,13 @@ namespace Gram.Game
     {
         
         private IGameSerialization _gameSerializationService; 
-        private GameModel _gameModel;
+        private IGameModel _gameModel;
         
+        public GameModel DebugameModel;
         
         private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
+            DebugameModel = (GameModel)_gameModel;
             _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
 
             _gameModel.OnLogicStateChange += OnLogicStateGameStateChange;

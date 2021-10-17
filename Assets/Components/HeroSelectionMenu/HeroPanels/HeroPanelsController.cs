@@ -11,12 +11,12 @@ namespace Gram.HeroSelectionMenu.HeroPanels
     {
         [SerializeField] private List<HeroPanel> HeroPanels;
 
-        private GameModel _gameModel;
+        private IGameModel _gameModel;
         private ICharacterDatabase _characterDatabase;
         
         
         private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
             _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
             _gameModel.OnHeroCollectionChange += UpdateHeroPanels;
 
@@ -26,7 +26,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             int panelIndex = 0;
             foreach (HeroPanel heroPanel in HeroPanels) {
                 int heroIndex = panelIndex;
-                heroPanel.OnSelect += selected => {
+                heroPanel.OnSelected += selected => {
                     if (heroIndex < _gameModel.GetCollectedHeroes().Count) {
                         _gameModel.TrySelectHero(heroIndex);
                     }
@@ -79,11 +79,11 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             
             foreach (HeroPanel currentPanel in HeroPanels) {
                 if (currentPanel == null) {
-                    Debug.LogWarning("Null element deleted from Hero Panels at index " + index);
+                    Debug.LogWarning($"Null element deleted from Hero Panels at index {index}");
                 } else {
                     List<HeroPanel> duplicated = HeroPanels.FindAll(panel => panel == currentPanel);
                     if (duplicated.Count > 1) {
-                        Debug.LogError("Same Hero Panel ("+ currentPanel.name+") added twice at index " + index);
+                        Debug.LogError($"Same Hero Panel ({currentPanel.name}) added twice at index {index}");
                     }
                 }
                 index++;

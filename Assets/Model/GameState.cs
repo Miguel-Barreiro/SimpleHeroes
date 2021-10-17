@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gram.Model
 {
+    [Serializable]
     public class GameState
     {
         [SerializeField]
@@ -20,10 +22,8 @@ namespace Gram.Model
         {
             HeroSelection,
             Battle,
-            Result
+            ShowResult
         }
 
     }
 }
-
-// {"SelectedHeroes":[],"BattleCount":0,"CurrentLogicState":0}

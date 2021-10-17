@@ -9,14 +9,15 @@ namespace Gram.HeroSelectionMenu
     public class HeroSelectionMenuController : MonoBehaviour
     {
 
+        [SerializeField] private GameObject[] MenuItems;
         [SerializeField] private Button BattleButton;
         
-        private GameModel _gameModel;
+        private IGameModel _gameModel;
         private GameDefinitions _gameDefinitions;
 
         private void Start() {
             _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
 
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
@@ -49,10 +50,15 @@ namespace Gram.HeroSelectionMenu
         }
 
         private void HideSelectionMenu() {
-            
+            foreach (GameObject menuItem in MenuItems) {
+                menuItem.SetActive(false);
+            }
         }
 
         private void ShowSelectionMenu() {
+            foreach (GameObject menuItem in MenuItems) {
+                menuItem.SetActive(true);
+            }
         }
 
 

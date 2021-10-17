@@ -1,24 +1,22 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Gram.Core
 {
-    public class SelectableHero : MonoBehaviour
+    public class SelectableHero : EventTrigger
     {
 
         public delegate void SelectableEvent(GameObject selected);
 
-        public event SelectableEvent OnSelect;
+        public event SelectableEvent OnSelected;
         public event SelectableEvent OnSelectMore;
 
 
         private bool _selectedMore = false;
         private Coroutine _holdCoroutine = null;
     
-        public void OnPointerDown() {
-            
-            Debug.Log("OnPointerDown");
-            
+        public override void OnPointerDown(PointerEventData data) {
             if(_holdCoroutine == null && !_selectedMore)
             {
                 _holdCoroutine = StartCoroutine(HoldCoroutineUtility());
@@ -40,10 +38,7 @@ namespace Gram.Core
             yield return null;
         }
 
-        public void OnPointerUp() {
-
-            Debug.Log("OnPointerUp");
-            
+        public override void OnPointerUp(PointerEventData data) {
             if (_holdCoroutine != null) {
                 StopCoroutine(_holdCoroutine);
                 _holdCoroutine = null;
@@ -51,7 +46,7 @@ namespace Gram.Core
 
             if (!_selectedMore) {
                 Debug.Log("OnSelect");
-                OnSelect?.Invoke(gameObject);
+                OnSelected?.Invoke(gameObject);
             }
             _selectedMore = false;
         }

@@ -13,7 +13,7 @@ namespace Gram.Utils.AnimationUtils
             if (endAnimationController != null) {
                 endAnimationController.AnimationEnd(AnimationName);
             } else {
-                Debug.LogError("expected <EndAnimationController> component in gameobject " + animator.gameObject.name);
+                Debug.LogError($"expected <EndAnimationController> component in gameobject {animator.gameObject.name}");
             }
         }
     }

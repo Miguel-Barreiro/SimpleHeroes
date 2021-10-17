@@ -1,20 +1,22 @@
+using System;
 using System.Collections.Generic;
 using Gram.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Model
 {
-    public class GameModel
+    [Serializable]
+    public class GameModel : IGameModel
     {
 
-        public delegate void GameModelDelegate();
-
-        public event GameModelDelegate OnLogicStateChange;
-        public event GameModelDelegate OnHeroCollectionChange;
+        public event GameBasics.SimpleDelegate OnLogicStateChange;
+        public event GameBasics.SimpleDelegate OnHeroCollectionChange;
         
-        public event GameModelDelegate OnSelectedHeroesChange;
+        public event GameBasics.SimpleDelegate OnSelectedHeroesChange;
         
-        private GameState _currentState;
+        [SerializeField]
+        private GameState CurrentState;
 
         private CharacterDatabase _characterDatabase;
         private GameDefinitions _gameDefinitions;
@@ -31,15 +33,15 @@ namespace Gram.Model
 
 
         public string GetSerializedGameState() {
-            return JsonUtility.ToJson(_currentState);
+            return JsonUtility.ToJson(CurrentState);
         }
         public void RestoreGameState(string newGameState) {
             GameState gameState = JsonUtility.FromJson<GameState>(newGameState);
-            _currentState = gameState;
+            CurrentState = gameState;
         }
         public void GenerateInitialGameState() {
 
-            _currentState = new GameState() {
+            CurrentState = new GameState() {
                 HeroesCollected = new List<Hero>(),
                 BattleCount = 0,
                 SelectedHeroes = new List<int>(),
@@ -58,25 +60,25 @@ namespace Gram.Model
         #region Hero Collections
 
         public void TrySelectHero(int heroIndex) {
-            if (_currentState.CurrentLogicState == GameState.GameLogicState.HeroSelection) {
+            if (CurrentState.CurrentLogicState == GameState.GameLogicState.HeroSelection) {
 
-                if (_currentState.SelectedHeroes.Contains(heroIndex)) {
-                    _currentState.SelectedHeroes.Remove(heroIndex);
+                if (CurrentState.SelectedHeroes.Contains(heroIndex)) {
+                    CurrentState.SelectedHeroes.Remove(heroIndex);
                     OnSelectedHeroesChange?.Invoke();
-                } else if( _currentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle &&
-                           heroIndex < _currentState.HeroesCollected.Count &&  heroIndex >= 0){
-                    _currentState.SelectedHeroes.Add(heroIndex);
+                } else if( CurrentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle &&
+                           heroIndex < CurrentState.HeroesCollected.Count &&  heroIndex >= 0){
+                    CurrentState.SelectedHeroes.Add(heroIndex);
                     OnSelectedHeroesChange?.Invoke();
                 }
             }
         }
 
         public List<int> GetSelectedHeroIndexes() {
-            return _currentState.SelectedHeroes;
+            return CurrentState.SelectedHeroes;
         }
 
         public List<Hero> GetCollectedHeroes() {
-            return _currentState.HeroesCollected;
+            return CurrentState.HeroesCollected;
         }
 
         
@@ -90,7 +92,7 @@ namespace Gram.Model
         #region GameLogic state
 
         public GameState.GameLogicState GetCurrentLogicState() {
-            return _currentState.CurrentLogicState;
+            return CurrentState.CurrentLogicState;
         }
         
 
@@ -99,7 +101,12 @@ namespace Gram.Model
         }
 
         public void GoToBattle() {
-            _currentState.CurrentLogicState = GameState.GameLogicState.Battle;
+            CurrentState.CurrentLogicState = GameState.GameLogicState.Battle;
+            OnLogicStateChange?.Invoke();
+        }
+
+        public void Retreat() {
+            CurrentState.CurrentLogicState = GameState.GameLogicState.HeroSelection;
             OnLogicStateChange?.Invoke();
         }
 
@@ -119,7 +126,7 @@ namespace Gram.Model
             
             List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetHeroCharactersData(numberHeroes);
             foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
-                _currentState.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
+                CurrentState.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
             }
         }
 

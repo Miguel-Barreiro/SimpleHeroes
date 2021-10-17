@@ -9,7 +9,7 @@ using Object = System.Object;
 namespace Gram.Utils
 {
     
-    //seeing we cannot use an external dependency injector I created a very basic one just as an example 
+    // seeing we cannot use an external dependency injector I created a very very basic one just as an example 
     // SINGLETON: for time saving as we dont want to create a full library  we are going to use a singleton and have everything here
     public class BasicDependencyInjector : MonoBehaviour
     {
@@ -25,7 +25,7 @@ namespace Gram.Utils
             GameModel gameModel = new GameModel(GameDefinitions, CharacterDatabase);
             GameSerializationController gameSerializationController = new GameSerializationController();
             
-            _objectsByType.Add(typeof(GameModel), gameModel);
+            _objectsByType.Add(typeof(IGameModel), gameModel);
             _objectsByType.Add(typeof(IGameSerialization), gameSerializationController);
             _objectsByType.Add(typeof(ICharacterDatabase), CharacterDatabase);
             _objectsByType.Add(typeof(GameDefinitions), GameDefinitions);
@@ -36,7 +36,7 @@ namespace Gram.Utils
         
         private void Awake() {
             if (_instance != null && _instance != this) {
-                Debug.LogError("BasicDependencyInjector objects found");
+                Debug.LogError("Multiple BasicDependencyInjector objects found");
             } else {
                 _instance = this;
             }
@@ -50,7 +50,7 @@ namespace Gram.Utils
             if (_objectsByType.ContainsKey(type)) {
                 return _objectsByType[type] as T;
             } else {
-                Debug.LogError("injector for type " + type.Name + " wasnt setup");
+                Debug.LogError($"injector for type {type.Name} wasnt setup");
                 return null;
             }
         }
