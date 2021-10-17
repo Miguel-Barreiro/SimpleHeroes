@@ -1,13 +1,23 @@
-namespace Model
+using System;
+using UnityEngine;
+
+namespace Gram.Model
 {
+    [Serializable]
     public class Hero
     {
-        public string Name;
-        public int Health;
-        public int AttackPower;
-        public int Experience;
-        public int Level;
 
+        [SerializeField]
+        public string CharacterDataName;
+        
+        [SerializeField]
+        public int Health;
+        [SerializeField]
+        public int AttackPower;
+        [SerializeField]
+        public int Experience;
+        [SerializeField]
+        public int Level;
         
     }
 }
