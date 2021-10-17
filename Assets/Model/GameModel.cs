@@ -63,7 +63,8 @@ namespace Gram.Model
                 if (_currentState.SelectedHeroes.Contains(heroIndex)) {
                     _currentState.SelectedHeroes.Remove(heroIndex);
                     OnSelectedHeroesChange?.Invoke();
-                } else if( _currentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle){
+                } else if( _currentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle &&
+                           heroIndex < _currentState.HeroesCollected.Count &&  heroIndex > 0){
                     _currentState.SelectedHeroes.Add(heroIndex);
                     OnSelectedHeroesChange?.Invoke();
                 }

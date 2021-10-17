@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Gram.Core
 {
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "CharacterDatabase", order = 0)]
-    public class CharacterDatabase : ScriptableObject
+    public class CharacterDatabase : ScriptableObject, ICharacterDatabase
     {
 
         [SerializeField]

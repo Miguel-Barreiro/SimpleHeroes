@@ -10,7 +10,10 @@ namespace Gram.HeroSelectionMenu
         
         [SerializeField]
         private Image PanelImage;
-        
+
+        [SerializeField]
+        private Image FrameImage;
+
         public void SetHero(CharacterConfiguration config) {
             PanelImage.sprite = config.HeroPortrait;
         }
@@ -20,13 +23,13 @@ namespace Gram.HeroSelectionMenu
         }
 
         public void SetSelected(bool selected) {
-            PanelImage.color = selected ? Color.white : _notSelectedColor;
+            FrameImage.color = selected ? Color.white : _notSelectedColor;
         }
 
         private Color _notSelectedColor;
         private Sprite _emptyImage;
         private void Awake() {
-            _notSelectedColor = PanelImage.color;
+            _notSelectedColor = FrameImage.color;
             _emptyImage = PanelImage.sprite;
         }
 

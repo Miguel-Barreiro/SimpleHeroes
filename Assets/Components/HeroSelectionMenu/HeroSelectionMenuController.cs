@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using Gram.Core;
-using Gram.HeroSelectionMenu;
 using Gram.Model;
 using Gram.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Gram.Game
+namespace Gram.HeroSelectionMenu
 {
     public class HeroSelectionMenuController : MonoBehaviour
     {
@@ -15,22 +14,23 @@ namespace Gram.Game
         [SerializeField] private List<HeroPanel> HeroPanels;
         
         private GameModel _gameModel;
-        private CharacterDatabase _characterDatabase;
+        private ICharacterDatabase _characterDatabase;
         
         private void Start() {
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
-            _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<CharacterDatabase>();
+            _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
             _gameModel.OnHeroCollectionChange += UpdateHeroPanels;
 
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
-
+            
             int panelIndex = 0;
             foreach (HeroPanel heroPanel in HeroPanels) {
                 int heroIndex = panelIndex;
                 heroPanel.OnSelect += selected => {
-                    Debug.Log("heroPanel.OnSelect " + heroIndex);
-                    _gameModel.TrySelectHero(heroIndex);
+                    if (heroIndex < _gameModel.GetCollectedHeroes().Count) {
+                        _gameModel.TrySelectHero(heroIndex);
+                    }
                 };
                 panelIndex++;
             }

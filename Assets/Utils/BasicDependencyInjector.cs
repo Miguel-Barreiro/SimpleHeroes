@@ -27,14 +27,10 @@ namespace Gram.Utils
             
             _objectsByType.Add(typeof(GameModel), gameModel);
             _objectsByType.Add(typeof(IGameSerialization), gameSerializationController);
-            _objectsByType.Add(typeof(CharacterDatabase), CharacterDatabase);
+            _objectsByType.Add(typeof(ICharacterDatabase), CharacterDatabase);
             _objectsByType.Add(typeof(GameDefinitions), GameDefinitions);
         }
 
-        
-        
-        
-        
         
         private readonly Dictionary<Type, Object> _objectsByType = new Dictionary<Type, Object>();
         

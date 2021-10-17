@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Gram.Game
+namespace Gram.Core
 {
     public class SelectableHero : MonoBehaviour
     {
@@ -40,9 +40,9 @@ namespace Gram.Game
             yield return null;
         }
 
-        public void OnClick() {
+        public void OnPointerUp() {
 
-            Debug.Log("onclick");
+            Debug.Log("OnPointerUp");
             
             if (_holdCoroutine != null) {
                 StopCoroutine(_holdCoroutine);
@@ -50,6 +50,7 @@ namespace Gram.Game
             }
 
             if (!_selectedMore) {
+                Debug.Log("OnSelect");
                 OnSelect?.Invoke(gameObject);
             }
             _selectedMore = false;
