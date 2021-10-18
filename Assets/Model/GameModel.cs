@@ -77,6 +77,17 @@ namespace Gram.Model
             return CurrentState.SelectedHeroes;
         }
 
+        public List<Hero> GetSelectedHeroes() {
+            List<Hero> result = new List<Hero>();
+
+            foreach (int selectedHeroIndex in CurrentState.SelectedHeroes) {
+                Hero selectedHero = CurrentState.HeroesCollected[selectedHeroIndex];
+                result.Add(selectedHero);
+            }
+            
+            return result;
+        }
+
         public List<Hero> GetCollectedHeroes() {
             return CurrentState.HeroesCollected;
         }

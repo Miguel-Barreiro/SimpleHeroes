@@ -26,7 +26,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             int panelIndex = 0;
             foreach (HeroPanel heroPanel in HeroPanels) {
                 int heroIndex = panelIndex;
-                heroPanel.OnSelected += selected => {
+                heroPanel.GetSelectableHero().OnSelected += () => {
                     if (heroIndex < _gameModel.GetCollectedHeroes().Count) {
                         _gameModel.TrySelectHero(heroIndex);
                     }
@@ -63,7 +63,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             int i = 0;
             foreach (Hero hero in heroesCollected) {
                 CharacterConfiguration charaterConfig = _characterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
-                HeroPanels[i].SetHero(charaterConfig);
+                HeroPanels[i].SetHero(hero, charaterConfig);
                 HeroPanels[i].SetSelected(selectedHeroes.Contains(i));
                 i++;
             }

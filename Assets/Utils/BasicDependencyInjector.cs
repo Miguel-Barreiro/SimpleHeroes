@@ -10,7 +10,8 @@ namespace Gram.Utils
 {
     
     // seeing we cannot use an external dependency injector I created a very very basic one just as an example 
-    // SINGLETON: for time saving as we dont want to create a full library  we are going to use a singleton and have everything here
+    // for time saving as we dont want to create a full library  we are going to use a singleton, have all bindings here and 
+    // monobehaviours will need to ask to the instances 
     public class BasicDependencyInjector : MonoBehaviour
     {
 

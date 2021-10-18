@@ -1,10 +1,12 @@
 using Gram.Core;
+using Gram.Model;
+using Gram.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Gram.HeroSelectionMenu.HeroPanels
 {
-    public class HeroPanel : SelectableHero
+    public class HeroPanel : MonoBehaviour 
     {
         
         [SerializeField]
@@ -13,11 +15,19 @@ namespace Gram.HeroSelectionMenu.HeroPanels
         [SerializeField]
         private Image FrameImage;
 
-        public void SetHero(CharacterConfiguration config) {
-            PanelImage.sprite = config.HeroPortrait;
+        [SerializeField]
+        private SelectableHero SelectableHero;
+        
+        public SelectableHero GetSelectableHero() { return SelectableHero; }
+        
+        public void SetHero(Hero hero, CharacterConfiguration characterConfiguration) {
+            PanelImage.sprite = characterConfiguration.HeroPortrait;
+
+            SelectableHero.SetHero(hero, characterConfiguration);
         }
 
         public void SetEmpty() {
+            SelectableHero.ResetHero();
             PanelImage.sprite = _emptyImage;
         }
 

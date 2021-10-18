@@ -19,6 +19,8 @@ namespace Gram.Model
 
         void TrySelectHero(int heroIndex);
         List<int> GetSelectedHeroIndexes();
+        
+        List<Hero> GetSelectedHeroes();
         List<Hero> GetCollectedHeroes();
 
 

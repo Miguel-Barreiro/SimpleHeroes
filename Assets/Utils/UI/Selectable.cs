@@ -2,16 +2,17 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Gram.Core
+namespace Gram.Utils.UI
 {
-    public class SelectableHero : EventTrigger
+    public class Selectable : EventTrigger
     {
 
-        public delegate void SelectableEvent(GameObject selected);
+        public delegate void SelectableEvent(PointerEventData data);
 
         public event SelectableEvent OnSelected;
         public event SelectableEvent OnSelectMore;
-
+        public event SelectableEvent OnSelectMoreEnd;
+        
 
         private bool _selectedMore = false;
         private Coroutine _holdCoroutine = null;
@@ -19,11 +20,11 @@ namespace Gram.Core
         public override void OnPointerDown(PointerEventData data) {
             if(_holdCoroutine == null && !_selectedMore)
             {
-                _holdCoroutine = StartCoroutine(HoldCoroutineUtility());
+                _holdCoroutine = StartCoroutine(HoldCoroutineUtility(data));
             }
         }
 
-        private IEnumerator HoldCoroutineUtility() {
+        private IEnumerator HoldCoroutineUtility(PointerEventData pointerEventData) {
             _selectedMore = false;
 
             float deltaTime = 0;
@@ -33,7 +34,7 @@ namespace Gram.Core
             }
             _selectedMore = true;
             _holdCoroutine = null;
-            OnSelectMore?.Invoke(gameObject);
+            OnSelectMore?.Invoke(pointerEventData);
             
             yield return null;
         }
@@ -44,10 +45,12 @@ namespace Gram.Core
                 _holdCoroutine = null;
             }
 
-            if (!_selectedMore) {
-                Debug.Log("OnSelect");
-                OnSelected?.Invoke(gameObject);
+            if (_selectedMore) {
+                OnSelectMoreEnd?.Invoke(data);
+            } else {
+                OnSelected?.Invoke(data);
             }
+            
             _selectedMore = false;
         }
 

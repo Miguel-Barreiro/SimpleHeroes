@@ -24,7 +24,7 @@ namespace Gram.Battle
             CharacterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
         }
 
-        public void Setup(Hero hero) {
+        public virtual void Setup(Hero hero) {
             CharacterConfiguration characterConfiguration = CharacterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
             
             GameObject heroVisual = GameObject.Instantiate(characterConfiguration.BattlePrefab, transform.position, quaternion.identity, transform);
