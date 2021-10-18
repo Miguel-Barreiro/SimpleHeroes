@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Gram.Core;
 using Gram.Model;
@@ -11,14 +10,16 @@ namespace Gram.HeroSelectionMenu.HeroPanels
     {
         [SerializeField] private List<HeroPanel> HeroPanels;
 
+        private IHeroCollectionModel _heroCollectionModel;
         private IGameModel _gameModel;
         private ICharacterDatabase _characterDatabase;
         
         
         private void Start() {
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
+            _heroCollectionModel = BasicDependencyInjector.Instance().GetObjectByType<IHeroCollectionModel>();
             _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
-            _gameModel.OnHeroCollectionChange += UpdateHeroPanels;
+            _heroCollectionModel.OnHeroCollectionChange += UpdateHeroPanels;
 
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
@@ -27,7 +28,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             foreach (HeroPanel heroPanel in HeroPanels) {
                 int heroIndex = panelIndex;
                 heroPanel.GetSelectableHero().OnSelected += () => {
-                    if (heroIndex < _gameModel.GetCollectedHeroes().Count) {
+                    if (heroIndex < _heroCollectionModel.GetCollectedHeroes().Count) {
                         _gameModel.TrySelectHero(heroIndex);
                     }
                 };
@@ -38,13 +39,12 @@ namespace Gram.HeroSelectionMenu.HeroPanels
         
         
         private void OnLogicStateChange() {
-            GameState.GameLogicState logicState = _gameModel.GetCurrentLogicState();
+            GameLogicState logicState = _gameModel.GetCurrentLogicState();
             switch (logicState) {
-                case GameState.GameLogicState.HeroSelection:
+                case GameLogicState.HeroSelection:
                     UpdateHeroPanels();
                     break;
             }
-            
         }
 
         
@@ -58,7 +58,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
         }
         
         private void UpdateHeroPanels() {
-            List<Hero> heroesCollected = _gameModel.GetCollectedHeroes();
+            List<Hero> heroesCollected = _heroCollectionModel.GetCollectedHeroes();
             List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
             int i = 0;
             foreach (Hero hero in heroesCollected) {

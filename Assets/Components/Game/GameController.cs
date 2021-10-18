@@ -12,11 +12,9 @@ namespace Gram.Game
         private IGameSerialization _gameSerializationService; 
         private IGameModel _gameModel;
         
-        public GameModel DebugameModel;
-        
         private void Start() {
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
-            DebugameModel = (GameModel)_gameModel;
+            
             _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
 
             _gameModel.OnChange+= SaveState;
@@ -31,9 +29,6 @@ namespace Gram.Game
         }
 
         private IEnumerator StartGameCoroutine() {
-            
-            //we need to wait until the unity start phase ends
-            
             yield return null;
             
             _gameSerializationService.LoadGame(state => {

@@ -35,13 +35,13 @@ namespace Gram.HeroSelectionMenu
         }
 
         private void OnLogicStateChange() {
-            GameState.GameLogicState logicState = _gameModel.GetCurrentLogicState();
+            GameLogicState logicState = _gameModel.GetCurrentLogicState();
             switch (logicState) {
-                case GameState.GameLogicState.HeroSelection:
+                case GameLogicState.HeroSelection:
                     ShowSelectionMenu();
                     UpdateHeroSelection();
                     break;
-                case GameState.GameLogicState.Battle:
+                case GameLogicState.Battle:
                     Debug.Log("GO TO BATTLE");
                     HideSelectionMenu();
                     break;

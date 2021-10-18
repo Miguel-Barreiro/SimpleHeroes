@@ -20,17 +20,18 @@ namespace Gram.Battle
             _gameModel.OnLogicStateChange += OnLogicStateChange;
 
             foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
+                // heroBattleCharacter.GetSelectableHero().OnSelected += OnSelectHero;
             }
         }
 
         
         private void OnLogicStateChange() {
-            GameState.GameLogicState logicState = _gameModel.GetCurrentLogicState();
+            GameLogicState logicState = _gameModel.GetCurrentLogicState();
             switch (logicState) {
-                case GameState.GameLogicState.HeroSelection:
+                case GameLogicState.HeroSelection:
                     HideBattleScreen();
                     break;
-                case GameState.GameLogicState.Battle:
+                case GameLogicState.Battle:
                     SetupBattleCharacters();
                     ShowBattleScreen();
                     break;

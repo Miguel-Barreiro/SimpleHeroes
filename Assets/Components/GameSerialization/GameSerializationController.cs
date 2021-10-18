@@ -7,18 +7,7 @@ namespace Gram.GameSerialization
 {
     public class GameSerializationController : IGameSerialization 
     {
-        
-        public GameSerializationController() {
-        }
 
-        private void OnGameStateChange() {
-            
-            // we are going to save the game state every time it changes so we can always return to it if the game is closed
-            
-            
-            
-        }
-        
         public void SaveGame(string state, Action doneCallack) {
             BinaryFormatter bf = new BinaryFormatter();
             string filePath = GetSaveFilePath();

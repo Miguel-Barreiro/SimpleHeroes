@@ -16,7 +16,6 @@ namespace Gram.Battle
         [SerializeField]
         private AnimationType AttackAnimationType;
         
-
         private EndAnimationController _endAnimationController;
         protected ICharacterDatabase CharacterDatabase;
         
@@ -24,11 +23,9 @@ namespace Gram.Battle
             CharacterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
         }
 
-        public virtual void Setup(Hero hero) {
-            CharacterConfiguration characterConfiguration = CharacterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
-            
-            GameObject heroVisual = GameObject.Instantiate(characterConfiguration.BattlePrefab, transform.position, quaternion.identity, transform);
-            _endAnimationController = heroVisual.GetComponent<EndAnimationController>(); 
+        public virtual void Setup(CharacterConfiguration characterConfiguration) {
+            GameObject visuals = GameObject.Instantiate(characterConfiguration.BattlePrefab, transform.position, quaternion.identity, transform);
+            _endAnimationController = visuals.GetComponent<EndAnimationController>(); 
             _endAnimationController.OnAnimationEnd += OnAnimationEnd;
         }
         

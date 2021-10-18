@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Core
 {
@@ -6,7 +7,7 @@ namespace Gram.Core
     public class CharacterConfiguration : ScriptableObject
     {
         
-        public Sprite HeroPortrait; 
+        [FormerlySerializedAs("HeroPortrait")] public Sprite Portrait; 
         public GameObject BattlePrefab;
         public Vector3 Scale;
 

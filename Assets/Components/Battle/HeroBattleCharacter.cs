@@ -11,11 +11,11 @@ namespace Gram.Battle
         [SerializeField]
         private SelectableHero SelectableHero;
         
-        public override void Setup(Hero hero) {
-            base.Setup(hero);
-            
+        public void Setup(Hero hero) {
             CharacterConfiguration characterConfiguration = CharacterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
             SelectableHero.SetHero(hero, characterConfiguration);
+
+            base.Setup(characterConfiguration);
         }
 
         public SelectableHero GetSelectableHero() { return SelectableHero; }

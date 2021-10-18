@@ -21,7 +21,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
         public SelectableHero GetSelectableHero() { return SelectableHero; }
         
         public void SetHero(Hero hero, CharacterConfiguration characterConfiguration) {
-            PanelImage.sprite = characterConfiguration.HeroPortrait;
+            PanelImage.sprite = characterConfiguration.Portrait;
 
             SelectableHero.SetHero(hero, characterConfiguration);
         }

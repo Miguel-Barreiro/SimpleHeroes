@@ -3,19 +3,16 @@ using Gram.Core;
 
 namespace Gram.Model
 {
-    public interface IGameModel
+    public interface IGameModel : ISerializableModel
     {
         
         event GameBasics.SimpleDelegate OnLogicStateChange;
-        event GameBasics.SimpleDelegate OnHeroCollectionChange;
         
         event GameBasics.SimpleDelegate OnSelectedHeroesChange;
 
         //this is to be used whenever there is a significant change that needs saved
         event GameBasics.SimpleDelegate OnChange;
         
-        string GetSerializedGameState();
-        void RestoreGameState(string newGameState);
         void GenerateInitialGameState();
 
 
@@ -23,12 +20,18 @@ namespace Gram.Model
         List<int> GetSelectedHeroIndexes();
         
         List<Hero> GetSelectedHeroes();
-        List<Hero> GetCollectedHeroes();
 
-
-        GameState.GameLogicState GetCurrentLogicState();
+        GameLogicState GetCurrentLogicState();
         void StartGameLoop();
         void GoToBattle();
         void Retreat();
     }
+    
+    public enum GameLogicState
+    {
+        HeroSelection,
+        Battle,
+        ShowResult
+    }
+
 }
