@@ -19,13 +19,12 @@ namespace Gram.UI.HeroDetailsPopup
         private TextMeshProUGUI ExperienceValue;
         
 
-        public void ShowHeroDetails(string name, int level, int attackPower, int experience, int experienceNeeded, Vector2 originalPosition) {
+        public void ShowHeroDetails(string name, int level, int attackPower, int experience, int experienceNeeded) {
             NameValue.text = name;
             LevelValue.text = $"{level}";
             AttackPowerValue.text = $"{attackPower}";
             ExperienceValue.text = $"{experience}/{experienceNeeded}";
 
-            Frame.position = originalPosition;
         }
 
 

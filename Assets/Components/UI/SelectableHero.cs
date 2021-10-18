@@ -45,8 +45,7 @@ namespace Gram.UI
                 _heroDetailPopup = Instantiate(HeroDetailPopupPrefab);
                 int experienceNeeded = _gameDefinitions.GetExperienceNeededToLevel(_hero.Level);
                 _heroDetailPopup.ShowHeroDetails(_hero.CharacterDataName, _hero.Level, 
-                                                 _hero.AttackPower, _hero.Experience, experienceNeeded, 
-                                                 data.position);
+                                                 _hero.AttackPower, _hero.Experience, experienceNeeded);
             }
         }
 

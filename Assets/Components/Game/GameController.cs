@@ -19,9 +19,15 @@ namespace Gram.Game
             DebugameModel = (GameModel)_gameModel;
             _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
 
-            _gameModel.OnLogicStateChange += OnLogicStateGameStateChange;
+            _gameModel.OnChange+= SaveState;
 
             StartCoroutine(StartGameCoroutine());
+        }
+
+        private void SaveState() {
+            _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
+                
+            });
         }
 
         private IEnumerator StartGameCoroutine() {
@@ -42,11 +48,6 @@ namespace Gram.Game
                 }
             });
         }
-
-        private void OnLogicStateGameStateChange() {
-            _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
-                
-            });
-        }
+        
     }
 }

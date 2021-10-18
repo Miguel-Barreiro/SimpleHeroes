@@ -11,6 +11,8 @@ namespace Gram.Model
         
         event GameBasics.SimpleDelegate OnSelectedHeroesChange;
 
+        //this is to be used whenever there is a significant change that needs saved
+        event GameBasics.SimpleDelegate OnChange;
         
         string GetSerializedGameState();
         void RestoreGameState(string newGameState);

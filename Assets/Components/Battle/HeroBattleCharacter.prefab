@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: 8360333238725220036}
   - component: {fileID: 4860307585515103724}
   - component: {fileID: 6707018859365751222}
+  - component: {fileID: 507050415412170290}
   m_Layer: 0
   m_Name: HeroBattleCharacter
   m_TagString: Untagged
@@ -121,7 +122,22 @@ MonoBehaviour:
   HealthBar: {fileID: 5590638746206350379}
   AttackAnimationType: {fileID: 11400000, guid: daf0dbc63346e7a43a305a049c77d9ee,
     type: 2}
-  SelectableHero: {fileID: 4860307585515103724}
+  SelectableHero: {fileID: 507050415412170290}
+--- !u!114 &507050415412170290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8360333238725220039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38bb40429f6413992b882e301f052cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HeroDetailPopupPrefab: {fileID: 1704675142547701131, guid: 38cca4b82ff81914bb675bdb5bb64ce7,
+    type: 3}
+  Selectable: {fileID: 4860307585515103724}
 --- !u!1 &8360333240085499629
 GameObject:
   m_ObjectHideFlags: 0

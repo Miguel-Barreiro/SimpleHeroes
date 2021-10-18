@@ -14,7 +14,9 @@ namespace Gram.Model
         public event GameBasics.SimpleDelegate OnHeroCollectionChange;
         
         public event GameBasics.SimpleDelegate OnSelectedHeroesChange;
-        
+
+        public event GameBasics.SimpleDelegate OnChange;
+
         [SerializeField]
         private GameState CurrentState;
 
@@ -108,16 +110,20 @@ namespace Gram.Model
         
 
         public void StartGameLoop() {
+            OnChange?.Invoke();
             OnLogicStateChange?.Invoke();
         }
 
         public void GoToBattle() {
             CurrentState.CurrentLogicState = GameState.GameLogicState.Battle;
+            OnChange?.Invoke();
             OnLogicStateChange?.Invoke();
         }
 
         public void Retreat() {
             CurrentState.CurrentLogicState = GameState.GameLogicState.HeroSelection;
+            CurrentState.SelectedHeroes.Clear();
+            OnChange?.Invoke();
             OnLogicStateChange?.Invoke();
         }
 

@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Gram.Core;
 using Gram.Model;
 using Gram.Utils;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gram.Battle
 {
@@ -33,7 +31,6 @@ namespace Gram.Battle
                     HideBattleScreen();
                     break;
                 case GameState.GameLogicState.Battle:
-                    Debug.Log("GO TO BATTLE");
                     SetupBattleCharacters();
                     ShowBattleScreen();
                     break;
