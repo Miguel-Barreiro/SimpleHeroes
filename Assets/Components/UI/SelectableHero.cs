@@ -1,11 +1,12 @@
 using System;
 using Gram.Core;
 using Gram.Model;
-using Gram.UI.HeroDetailsPopup;
+using Gram.UI.Tooltips;
 using Gram.Utils;
 using Gram.Utils.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace Gram.UI
 {
@@ -13,14 +14,13 @@ namespace Gram.UI
     {
         public event GameBasics.SingleParameterDelegate<SelectableHero> OnSelected;
         
-        [SerializeField] private HeroDetailPopup HeroDetailPopupPrefab;
-        
         [SerializeField]
         private Selectable Selectable;
         
         private Hero _hero;
         private CharacterConfiguration _characterConfiguration;
 
+        private TooltipSystem _tooltipSystem;
         private GameDefinitions _gameDefinitions;
         
         public void SetHero(Hero hero, CharacterConfiguration characterConfiguration) {
@@ -46,21 +46,16 @@ namespace Gram.UI
 
         
 
-        private HeroDetailPopup _heroDetailPopup;
         private void HandleSelectedMore(PointerEventData data) {
             if (_hero != null) {
-                _heroDetailPopup = Instantiate(HeroDetailPopupPrefab);
                 int experienceNeeded = _gameDefinitions.GetExperienceNeededToLevel(_hero.Level);
-                _heroDetailPopup.ShowHeroDetails(_hero.CharacterNameId, _hero.Level, 
-                                                 _hero.AttackPower, _hero.Experience, experienceNeeded);
+                _tooltipSystem.ShowHeroDetails(_hero.CharacterNameId, _hero.Level, 
+                                               _hero.AttackPower, _hero.Experience, experienceNeeded, data);
             }
         }
 
         private void HandleSelectedMoreEnd(PointerEventData data) {
-            if (_heroDetailPopup != null) {
-                _heroDetailPopup.Close();
-                _heroDetailPopup = null;
-            }
+            _tooltipSystem.CloseHeroDetailsTooltip();
         }
 
 
@@ -77,7 +72,9 @@ namespace Gram.UI
             Selectable.OnSelectMoreEnd += HandleSelectedMoreEnd;
         }
 
+
         private void Awake() {
+            _tooltipSystem = BasicDependencyInjector.Instance().GetObjectByType<TooltipSystem>();
             _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
         }
 

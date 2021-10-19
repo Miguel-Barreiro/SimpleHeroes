@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 namespace Gram.Utils.UI
 {
-    public class Selectable : EventTrigger
+    public class Selectable : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
 
         public delegate void SelectableEvent(PointerEventData data);
@@ -14,46 +14,47 @@ namespace Gram.Utils.UI
         public event SelectableEvent OnSelectMoreEnd;
         
 
-        private bool _selectedMore = false;
+        private bool _hasHold = false;
         private Coroutine _holdCoroutine = null;
-    
-        public override void OnPointerDown(PointerEventData data) {
-            if(_holdCoroutine == null && !_selectedMore)
+        
+        public void OnPointerDown(PointerEventData data) {
+            if(_holdCoroutine == null && !_hasHold)
             {
                 _holdCoroutine = StartCoroutine(HoldCoroutineUtility(data));
             }
         }
 
         private IEnumerator HoldCoroutineUtility(PointerEventData pointerEventData) {
-            _selectedMore = false;
+            _hasHold = false;
 
             float deltaTime = 0;
             while (deltaTime < 3) {
                 deltaTime += Time.deltaTime;
                 yield return null;
             }
-            _selectedMore = true;
+            _hasHold = true;
             _holdCoroutine = null;
             OnSelectMore?.Invoke(pointerEventData);
             
             yield return null;
         }
 
-        public override void OnPointerUp(PointerEventData data) {
+        public void OnPointerUp(PointerEventData data) {
+            
             if (_holdCoroutine != null) {
                 StopCoroutine(_holdCoroutine);
                 _holdCoroutine = null;
             }
 
-            if (_selectedMore) {
+            if (_hasHold) {
                 OnSelectMoreEnd?.Invoke(data);
             } else {
                 OnSelected?.Invoke(data);
             }
             
-            _selectedMore = false;
+            _hasHold = false;
         }
 
-    
+        
     }
 }

@@ -1,13 +1,10 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
-namespace Gram.UI.HeroDetailsPopup
+namespace Gram.UI.Tooltips
 {
-    public class HeroDetailPopup : MonoBehaviour
+    public class HeroDetailsTooltip : MonoBehaviour
     {
-        [SerializeField]
-        private RectTransform Frame;
 
         [SerializeField]
         private TextMeshProUGUI NameValue;
@@ -20,6 +17,7 @@ namespace Gram.UI.HeroDetailsPopup
         
 
         public void ShowHeroDetails(string name, int level, int attackPower, int experience, int experienceNeeded) {
+            gameObject.SetActive(true);
             NameValue.text = name;
             LevelValue.text = $"{level}";
             AttackPowerValue.text = $"{attackPower}";
@@ -27,9 +25,10 @@ namespace Gram.UI.HeroDetailsPopup
 
         }
 
-
-        public void Close() {
-            Destroy(gameObject);
+        public void Hide() {
+            gameObject.SetActive(false);
         }
+
+ 
     }
 }

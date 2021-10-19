@@ -80,18 +80,22 @@ namespace Gram.Battle
         }
 
         public void Damage(int damage, int newHealthValue, float percentageHealthLeft, Action doneCallback) {
-            void EndHitAnimationCallback(AnimationType type) {
-                if (type == HitAnimationType) {
-                    _endAnimationController.OnAnimationEnd -= EndHitAnimationCallback;
-                    doneCallback();
-                }
-            }
-
-            _endAnimationController.OnAnimationEnd += EndHitAnimationCallback;
-            Animator.SetTrigger(HIT_ANIMATOR_PARAMETER);
-            
             HealthBar.SetPercentage(percentageHealthLeft);
             CharacterTooltip.TriggerDamage(damage);
+            
+            if (newHealthValue > 0) {
+                void EndHitAnimationCallback(AnimationType type) {
+                    if (type == HitAnimationType) {
+                        _endAnimationController.OnAnimationEnd -= EndHitAnimationCallback;
+                        doneCallback();
+                    }
+                }
+
+                _endAnimationController.OnAnimationEnd += EndHitAnimationCallback;
+                Animator.SetTrigger(HIT_ANIMATOR_PARAMETER);
+            } else {
+                Kill(doneCallback);
+            }
         }
 
         public void Kill(Action doneCallback) {
@@ -101,6 +105,7 @@ namespace Gram.Battle
                     doneCallback();
                 }
             }
+            HealthBar.SetPercentage(0);
 
             _endAnimationController.OnAnimationEnd += EndDeathAnimationCallback;
             Animator.SetTrigger(DEATH_ANIMATOR_PARAMETER);

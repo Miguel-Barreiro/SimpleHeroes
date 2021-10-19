@@ -96,13 +96,7 @@ namespace Gram.Battle
 
         private void PerformAttack(BattleCharacter attacker, BattleCharacter attacked, int damage, int newAttackedHealth, float newAttackedHealthPercentage, Action doneCallback) {
             attacker.Attack(damage, () => {
-                attacked.Damage(damage, newAttackedHealth, newAttackedHealthPercentage,() => {
-                    if (newAttackedHealth == 0) {
-                        attacked.Kill(doneCallback);
-                    } else {
-                        doneCallback?.Invoke();
-                    }
-                });
+                attacked.Damage(damage, newAttackedHealth, newAttackedHealthPercentage,doneCallback);
             });
         }
         
