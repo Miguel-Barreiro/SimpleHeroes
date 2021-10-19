@@ -12,6 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e111189cffb49828081e8585876f4af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnimationName: {fileID: 11400000, guid: 7336fa906463a3e41992e2efc7f13bb1, type: 2}
+--- !u!114 &-6972076561656027331
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e111189cffb49828081e8585876f4af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   AnimationName: {fileID: 11400000, guid: daf0dbc63346e7a43a305a049c77d9ee, type: 2}
 --- !u!1101 &-5129042249917341903
 AnimatorStateTransition:
@@ -50,7 +63,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e111189cffb49828081e8585876f4af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimationName: {fileID: 11400000, guid: daf0dbc63346e7a43a305a049c77d9ee, type: 2}
+  AnimationName: {fileID: 11400000, guid: 7336fa906463a3e41992e2efc7f13bb1, type: 2}
+--- !u!114 &-84755998766519196
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e111189cffb49828081e8585876f4af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnimationName: {fileID: 11400000, guid: a84abb20d7acf8041ae6c7b75dea2637, type: 2}
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -65,43 +91,43 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: hit
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: walk
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: attack
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: attackType
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: castType
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: cast
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -457,7 +483,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: 110182605}
   - {fileID: 1753701182306611755}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -6972076561656027331}
   m_Position: {x: -252, y: -12, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -575,7 +602,8 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -84755998766519196}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

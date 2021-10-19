@@ -7,6 +7,7 @@ namespace Gram.Core
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "CharacterDatabase", order = 0)]
     public class CharacterDatabase : ScriptableObject, ICharacterDatabase
     {
+        //TODO: add easy to access collection for access any config by id
 
         [SerializeField]
         private List<CharacterConfiguration> HeroCharacters;
@@ -14,7 +15,7 @@ namespace Gram.Core
         [SerializeField]
         private List<CharacterConfiguration> EnemyCharacters;
 
-        public List<CharacterConfiguration> GetHeroCharactersData(int number, List<CharacterConfiguration> excludingList = null) {
+        public List<CharacterConfiguration> GetMultipleRandomHeroCharactersData(int number, List<CharacterConfiguration> excludingList = null) {
             
             List<CharacterConfiguration> result = new List<CharacterConfiguration>();
             List<CharacterConfiguration> remainingCharacters = new List<CharacterConfiguration>();
@@ -40,6 +41,14 @@ namespace Gram.Core
             return EnemyCharacters.Find(configuration => configuration.Id.Equals(id));
         }
 
+
+
+        public CharacterConfiguration GetRandomEnemyCharacterData() {
+            int randomIndex = Random.Range(0, EnemyCharacters.Count);
+            return EnemyCharacters[randomIndex];
+        }
+
+
         private void OnValidate() {
             int index = 0;
             foreach (CharacterConfiguration characterConfiguration in HeroCharacters) {
@@ -52,7 +61,6 @@ namespace Gram.Core
             }
         }
 
-        //TODO: add easy to access collection for access any config by id
-        
+
     }
 }

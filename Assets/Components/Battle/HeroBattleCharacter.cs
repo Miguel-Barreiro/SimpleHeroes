@@ -1,3 +1,4 @@
+using System;
 using Gram.Core;
 using Gram.Model;
 using Gram.UI;
@@ -15,9 +16,10 @@ namespace Gram.Battle
             CharacterConfiguration characterConfiguration = CharacterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
             SelectableHero.SetHero(hero, characterConfiguration);
 
-            base.Setup(characterConfiguration);
+            base.Setup(characterConfiguration, false);
         }
 
         public SelectableHero GetSelectableHero() { return SelectableHero; }
+
     }
 }

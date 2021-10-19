@@ -1,4 +1,3 @@
-using System;
 using Gram.Core;
 using Gram.Model;
 using Gram.UI.HeroDetailsPopup;
@@ -11,7 +10,7 @@ namespace Gram.UI
 {
     public class SelectableHero : MonoBehaviour
     {
-        public event GameBasics.SimpleDelegate OnSelected;
+        public event GameBasics.SingleParameterDelegate<SelectableHero> OnSelected;
         
         [SerializeField] private HeroDetailPopup HeroDetailPopupPrefab;
         
@@ -34,7 +33,7 @@ namespace Gram.UI
         }
         
         private void HandleSelected(PointerEventData data) { 
-            OnSelected?.Invoke();
+            OnSelected?.Invoke(this);
         }
 
         private HeroDetailPopup _heroDetailPopup;

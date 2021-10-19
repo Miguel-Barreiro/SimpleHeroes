@@ -19,12 +19,24 @@ namespace Gram.Model
             return _state.HeroesCollected[id];
         }
 
+
+        private readonly List<Hero> _getHeroesByIdResult = new List<Hero>();
+        public List<Hero> GetHeroesById(List<int> stateHeroes) {
+            
+            _getHeroesByIdResult.Clear();
+            foreach (int heroIndex in stateHeroes) {
+                _getHeroesByIdResult.Add(GetHeroById(heroIndex));
+            }
+            return _getHeroesByIdResult;
+        }
+
+
         public void GenerateInitialState() {
             _state = new State();
             
             int numberHeroes = _gameDefinitions.InitialNumberHeroes;
             
-            List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetHeroCharactersData(numberHeroes);
+            List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetMultipleRandomHeroCharactersData(numberHeroes);
             foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
                 _state.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
             }
@@ -73,5 +85,6 @@ namespace Gram.Model
             State state = JsonUtility.FromJson<State>(newGameState);
             _state = state;
         }
+
     }
 }

@@ -117,10 +117,14 @@ namespace Gram.Model
         }
 
         public void GoToBattle() {
+            Enemy enemyForBattle = GenerateEnemyForBattle(_state.BattleCount);
+            _battleModel.GenerateBattle(_state.SelectedHeroes, enemyForBattle);
+            
             _state.CurrentLogicState = GameLogicState.Battle;
             OnChange?.Invoke();
             OnLogicStateChange?.Invoke();
         }
+
 
         public void Retreat() {
             _state.CurrentLogicState = GameLogicState.HeroSelection;
@@ -157,9 +161,23 @@ namespace Gram.Model
         private IHeroCollectionModel _heroCollectionModel;
         private IBattleModel _battleModel;
 
-        private CharacterDatabase _characterDatabase;
+        private ICharacterDatabase _characterDatabase;
         private GameDefinitions _gameDefinitions;
 
+
+
+        private Enemy GenerateEnemyForBattle(int stateBattleCount) {
+            CharacterConfiguration enemyCharacterData = _characterDatabase.GetRandomEnemyCharacterData();
+            Enemy newEnemy = new Enemy() {
+                Health = enemyCharacterData.InitialHealth,
+                AttackPower = enemyCharacterData.InitialAttackPower,
+                CharacterDataName = enemyCharacterData.Id
+            };
+            return newEnemy;
+        }
+
+        
+        
         #endregion
 
 

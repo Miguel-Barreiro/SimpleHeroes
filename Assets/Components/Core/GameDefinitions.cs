@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Gram.Model
+namespace Gram.Core
 {
     [CreateAssetMenu(fileName = "GameDefinitions", menuName = "GameDefinitions", order = 0)]
     public class GameDefinitions : ScriptableObject

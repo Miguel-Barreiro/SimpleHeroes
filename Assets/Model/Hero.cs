@@ -12,9 +12,7 @@ namespace Gram.Model
         public int Experience;
         [SerializeField]
         public int Level;
-
-        public void Damage(int attackPower) { throw new NotImplementedException(); }
-
+        
         public int GetAttackDamage() { return AttackPower; }
 
     }

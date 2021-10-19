@@ -13,13 +13,12 @@ namespace Gram.Model
         [SerializeField]
         public int Health;
 
-        public event GameBasics.SimpleDelegate OnDeath;
-
         public void Damage(int damage) {
-            Health -= damage;
-            if (Health <= 0) {
-                OnDeath?.Invoke();
-            }
+            Health = Mathf.Clamp(Health - damage, 0, Int32.MaxValue);
+        }
+
+        public bool IsAlive() {
+            return Health > 0;
         }
 
     }

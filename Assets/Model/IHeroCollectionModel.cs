@@ -12,5 +12,6 @@ namespace Gram.Model
         Hero GetHeroById(int id);
         
         List<Hero> GetCollectedHeroes();
+        List<Hero> GetHeroesById(List<int> heroIndexes);
     }
 }

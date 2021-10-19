@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Gram.Core;
 using Gram.Model;
+using Gram.UI;
 using Gram.Utils;
 using UnityEngine;
 
@@ -24,19 +26,29 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
             
-            int panelIndex = 0;
             foreach (HeroPanel heroPanel in HeroPanels) {
-                int heroIndex = panelIndex;
-                heroPanel.GetSelectableHero().OnSelected += () => {
-                    if (heroIndex < _heroCollectionModel.GetCollectedHeroes().Count) {
-                        _gameModel.TrySelectHero(heroIndex);
-                    }
-                };
-                panelIndex++;
+                heroPanel.GetSelectableHero().OnSelected += OnSelectHero;
             }
-            
         }
         
+        private void OnDestroy() {
+            foreach (HeroPanel heroPanel in HeroPanels) {
+                heroPanel.GetSelectableHero().OnSelected -= OnSelectHero;
+            }
+        }
+
+        
+        private void OnSelectHero(SelectableHero selectable) {
+            int heroIndex = 0;
+            foreach (HeroPanel heroPanel in HeroPanels) {
+                if (heroPanel.GetSelectableHero() == selectable) {
+                    _gameModel.TrySelectHero(heroIndex);    
+                }
+
+                heroIndex++;
+            }
+        }
+
         
         private void OnLogicStateChange() {
             GameLogicState logicState = _gameModel.GetCurrentLogicState();

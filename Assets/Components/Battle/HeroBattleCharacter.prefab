@@ -120,8 +120,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealthBar: {fileID: 5590638746206350379}
-  AttackAnimationType: {fileID: 11400000, guid: daf0dbc63346e7a43a305a049c77d9ee,
+  AttackAnimationType: {fileID: 11400000, guid: 7336fa906463a3e41992e2efc7f13bb1,
     type: 2}
+  HitAnimationType: {fileID: 11400000, guid: daf0dbc63346e7a43a305a049c77d9ee, type: 2}
+  DeathAnimationType: {fileID: 11400000, guid: a84abb20d7acf8041ae6c7b75dea2637, type: 2}
   SelectableHero: {fileID: 507050415412170290}
 --- !u!114 &507050415412170290
 MonoBehaviour:
