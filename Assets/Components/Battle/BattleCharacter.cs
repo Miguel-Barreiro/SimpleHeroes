@@ -5,6 +5,7 @@ using Gram.Utils;
 using Gram.Utils.AnimationUtils;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Battle
 {
@@ -12,7 +13,11 @@ namespace Gram.Battle
     {
 
         [SerializeField]
+        private CharacterTooltip CharacterTooltip;
+
+        [SerializeField]
         private HealthBar HealthBar;
+
         
         [SerializeField]
         private AnimationType AttackAnimationType;
@@ -33,15 +38,10 @@ namespace Gram.Battle
             CharacterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
         }
 
-        public void Setup(Character character, bool flip) {
+        public void Setup(Character character) {
             CharacterConfiguration = CharacterDatabase.GetCharacterConfigurationById(character.CharacterDataName); 
             Visuals = GameObject.Instantiate(CharacterConfiguration.BattlePrefab, transform.position, 
                                                 quaternion.identity, transform);
-            if (flip) {
-                var localScale = Visuals.transform.localScale;
-                Vector3 newScale = new Vector3(-localScale.x, localScale.y, localScale.z);
-                Visuals.transform.localScale = newScale;
-            }
             _endAnimationController = Visuals.GetComponent<EndAnimationController>();
             Animator = Visuals.GetComponent<Animator>();
             
@@ -53,13 +53,15 @@ namespace Gram.Battle
             _endAnimationController = null;
         }
 
-        
+
+        public GameObject GetVisuals() { return Visuals; }
+
 
         private readonly int ATTACK_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("attack"); 
         private readonly int DEATH_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("death"); 
         private readonly int HIT_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("hit"); 
         
-        public void Attack(Action doneCallback) {
+        public void Attack(int attackValue, Action doneCallback) {
             void EndAttackAnimationCallback(AnimationType type) {
                 if (type == AttackAnimationType) {
                     _endAnimationController.OnAnimationEnd -= EndAttackAnimationCallback;
@@ -69,6 +71,7 @@ namespace Gram.Battle
 
             _endAnimationController.OnAnimationEnd += EndAttackAnimationCallback;
             Animator.SetTrigger(ATTACK_ANIMATOR_PARAMETER);
+            CharacterTooltip.TriggerAttack(attackValue);
         }
 
         public void Damage(int damage, int newHealthValue, float percentageHealthLeft, Action doneCallback) {
@@ -83,6 +86,7 @@ namespace Gram.Battle
             Animator.SetTrigger(HIT_ANIMATOR_PARAMETER);
             
             HealthBar.SetPercentage(percentageHealthLeft);
+            CharacterTooltip.TriggerDamage(damage);
         }
 
         public void Kill(Action doneCallback) {

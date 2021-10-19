@@ -42,7 +42,7 @@ namespace Gram.Battle
 
             ToggleHeroSelection(false);
             
-            HeroBattleCharacters[turn.HeroIndexAttack].Attack(() => {
+            HeroBattleCharacters[turn.HeroIndexAttack].Attack(turn.DamageToEnemy, () => {
                 EnemyBattleCharacters[0].Damage(turn.DamageToEnemy, turn.NewEnemyHealth, 
                                                     turn.NewEnemyHealthPercentage, () => {
                     StartCoroutine(EnemyAttacksCoroutine(turn, () => {
@@ -57,7 +57,7 @@ namespace Gram.Battle
             foreach (BattleTurn.EnemyAttack attack in turn.EnemyAttacks) {
                 
                 bool attackInProgress = true;
-                EnemyBattleCharacters[0].Attack(() => {
+                EnemyBattleCharacters[0].Attack(attack.Damage, () => {
                     HeroBattleCharacters[turn.EnemyAttacks[0].HeroIndex].Damage(attack.Damage, attack.NewHeroHealth, 
                                                                                 attack.NewHeroHealthPercentage,() => {
                         attackInProgress = false;
@@ -97,7 +97,6 @@ namespace Gram.Battle
                     ShowBattleScreen();
                     break;
             }
-    
         }
 
         private void SetupBattleCharacters() {
@@ -106,12 +105,14 @@ namespace Gram.Battle
                 Hero hero = selectedHeroIndexes[i];
                 HeroBattleCharacter heroBattleCharacter = HeroBattleCharacters[i];
                 heroBattleCharacter.Setup(hero);
+                Vector3 localScale = heroBattleCharacter.GetVisuals().transform.localScale;
+                heroBattleCharacter.GetVisuals().transform.localScale = new Vector3(-localScale.x, localScale.y, localScale.z);
             }
 
             Enemy enemy =_battleModel.GetEnemy();
 
 
-            EnemyBattleCharacters[0].Setup(enemy, true);
+            EnemyBattleCharacters[0].Setup(enemy);
         }
 
         private void OnSelectHero(SelectableHero selectableHero) {

@@ -11,7 +11,7 @@ namespace Gram.Battle
         private SelectableHero SelectableHero;
         
         public void Setup(Hero hero) {
-            base.Setup(hero, false);
+            base.Setup(hero);
             SelectableHero.SetHero(hero, CharacterConfiguration);
         }
 
