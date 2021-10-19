@@ -27,10 +27,15 @@ namespace Gram.Model
         }
 
         public void GenerateBattle(List<int> participatingHeroes, Enemy enemy) {
+            enemy.Heal();
             _state = new State() {
                 Enemy = enemy,
                 HeroIds = participatingHeroes
             };
+            List<Hero> heroes = GetHeroes();
+            foreach (Hero hero in heroes) {
+                hero.Heal();
+            }
         }
 
         public Enemy GetEnemy() {
@@ -76,17 +81,19 @@ namespace Gram.Model
 
         private void HandleHeroDamage(int chosenHeroIndex, int damageToEnemy, Hero attackedHero, int damage, int id) {
             attackedHero.Damage(damage);
-            var heroHealthLeft = attackedHero.Health;
+            var heroHealthLeft = attackedHero.CurrentHealth;
 
             BattleTurn.EnemyAttack enemyAttack = new BattleTurn.EnemyAttack() {
                 HeroIndex = id, 
                 Damage = damage, 
-                NewHeroHealth = heroHealthLeft
+                NewHeroHealth = heroHealthLeft,
+                NewHearoHealthPercentage = heroHealthLeft/ (float)attackedHero.Health
             };
             BattleTurn battleTurn = new BattleTurn() {
                 DamageToEnemy = damageToEnemy,
                 HeroIndexAttack = chosenHeroIndex,
-                NewEnemyHealth = _state.Enemy.Health,
+                NewEnemyHealth = _state.Enemy.CurrentHealth,
+                NewEnemyHealthPercentage = _state.Enemy.CurrentHealth/(float)_state.Enemy.Health,
                 EnemyAttacks = new List<BattleTurn.EnemyAttack>() { enemyAttack },
             };
             
@@ -94,7 +101,7 @@ namespace Gram.Model
                 battleTurn.BattleEnd = false;
                 battleTurn.BattleResult = new BattleResult() { };
             } else {
-                battleTurn.BattleEnd = false;
+                battleTurn.BattleEnd = true;
                 battleTurn.BattleResult = new BattleResult() { };
                 
             }

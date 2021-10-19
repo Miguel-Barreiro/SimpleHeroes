@@ -7,6 +7,7 @@ namespace Gram.Model
         public int HeroIndexAttack;
         public int DamageToEnemy;
         public int NewEnemyHealth;
+        public float NewEnemyHealthPercentage;
 
         public List<EnemyAttack> EnemyAttacks = new List<EnemyAttack>();
 
@@ -19,6 +20,7 @@ namespace Gram.Model
             public int HeroIndex;
             public int Damage;
             public int NewHeroHealth;
+            public float NewHearoHealthPercentage;
         }
         
     }

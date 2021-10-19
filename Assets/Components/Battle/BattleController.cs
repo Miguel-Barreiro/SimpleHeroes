@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Gram.Core;
 using Gram.Model;
@@ -37,20 +38,51 @@ namespace Gram.Battle
         private void BattleModelOnOnNewTurnExecuted(BattleTurn turn) {
             Debug.Log("new turn " + JsonUtility.ToJson(turn));
 
+            ToggleHeroSelection(false);
+            
             HeroBattleCharacters[turn.HeroIndexAttack].Attack(() => {
-                EnemyBattleCharacters[0].Damage(() => {
-                    EnemyBattleCharacters[0].Attack(() => {});            
+                EnemyBattleCharacters[0].Damage(turn.DamageToEnemy, turn.NewEnemyHealth, 
+                                                    turn.NewEnemyHealthPercentage, () => {
+                    StartCoroutine(EnemyAttacksCoroutine(turn, () => {
+                        ToggleHeroSelection(true);
+                    }));
                 });
             });
-
-
         }
+
+
+        private IEnumerator EnemyAttacksCoroutine(BattleTurn turn, Action doneCallback) {
+            foreach (BattleTurn.EnemyAttack attack in turn.EnemyAttacks) {
+                
+                bool attackInProgress = true;
+                EnemyBattleCharacters[0].Attack(() => {
+                    HeroBattleCharacters[turn.EnemyAttacks[0].HeroIndex].Damage(attack.Damage, attack.NewHeroHealth, 
+                                                                                attack.NewHearoHealthPercentage,() => {
+                        attackInProgress = false;
+                    });
+                });
+
+                while (attackInProgress) {
+                    yield return null;
+                }
+            }
+            
+            doneCallback?.Invoke();
+        }
+
+        private void ToggleHeroSelection(bool activated) {  }
 
 
         private void OnLogicStateChange() {
             GameLogicState logicState = _gameModel.GetCurrentLogicState();
             switch (logicState) {
                 case GameLogicState.HeroSelection:
+                    foreach (BattleCharacter battleCharacter in EnemyBattleCharacters) {
+                        battleCharacter.ResetCharacter();
+                    }
+                    foreach (HeroBattleCharacter battleCharacter in HeroBattleCharacters) {
+                        battleCharacter.ResetCharacter();
+                    }
                     HideBattleScreen();
                     break;
                 case GameLogicState.Battle:

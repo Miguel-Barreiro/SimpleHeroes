@@ -42,6 +42,12 @@ namespace Gram.Battle
             Animator = Visuals.GetComponent<Animator>();
         }
 
+        public void ResetCharacter() {
+            Destroy(Visuals);
+            _endAnimationController = null;
+        }
+
+
         private readonly int ATTACK_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("attack"); 
         private readonly int DEATH_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("death"); 
         private readonly int HIT_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("hit"); 
@@ -58,7 +64,7 @@ namespace Gram.Battle
             Animator.SetTrigger(ATTACK_ANIMATOR_PARAMETER);
         }
 
-        public void Damage(Action doneCallback) {
+        public void Damage(int damage, int newHealthValue, float percentageHealthLeft, Action doneCallback) {
             void EndHitAnimationCallback(AnimationType type) {
                 if (type == HitAnimationType) {
                     _endAnimationController.OnAnimationEnd -= EndHitAnimationCallback;
@@ -68,6 +74,8 @@ namespace Gram.Battle
 
             _endAnimationController.OnAnimationEnd += EndHitAnimationCallback;
             Animator.SetTrigger(HIT_ANIMATOR_PARAMETER);
+            
+            HealthBar.SetPercentage(percentageHealthLeft);
         }
 
         public void Kill(Action doneCallback) {

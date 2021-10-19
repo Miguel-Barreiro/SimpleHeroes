@@ -1,5 +1,4 @@
 using System;
-using Gram.Core;
 using UnityEngine;
 
 namespace Gram.Model
@@ -13,12 +12,25 @@ namespace Gram.Model
         [SerializeField]
         public int Health;
 
+        [SerializeField]
+        public int CurrentHealth;
+
+        
         public void Damage(int damage) {
-            Health = Mathf.Clamp(Health - damage, 0, Int32.MaxValue);
+            CurrentHealth = Mathf.Clamp(Health - damage, 0, Health);
         }
 
+        public void Heal(int value) {
+            CurrentHealth = Mathf.Clamp(Health + value, 0, Health);
+        }
+
+        public void Heal() {
+            CurrentHealth = Health;
+        }
+
+        
         public bool IsAlive() {
-            return Health > 0;
+            return CurrentHealth > 0;
         }
 
     }
