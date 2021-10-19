@@ -17,11 +17,11 @@ namespace Gram.Model
 
         
         public void Damage(int damage) {
-            CurrentHealth = Mathf.Clamp(Health - damage, 0, Health);
+            CurrentHealth = Mathf.Clamp(CurrentHealth - damage, 0, Health);
         }
 
         public void Heal(int value) {
-            CurrentHealth = Mathf.Clamp(Health + value, 0, Health);
+            CurrentHealth = Mathf.Clamp(CurrentHealth + value, 0, Health);
         }
 
         public void Heal() {

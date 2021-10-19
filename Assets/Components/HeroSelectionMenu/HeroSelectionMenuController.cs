@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Gram.Core;
 using Gram.Model;
@@ -17,13 +18,16 @@ namespace Gram.HeroSelectionMenu
         private GameDefinitions _gameDefinitions;
 
         private void Start() {
-            _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
 
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
             
             BattleButton.onClick.AddListener(OnBattlePressed);
+        }
+
+        private void Awake() {
+            _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
         }
 
         private void OnBattlePressed() {

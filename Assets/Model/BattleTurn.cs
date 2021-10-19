@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Model
 {
@@ -9,18 +12,19 @@ namespace Gram.Model
         public int NewEnemyHealth;
         public float NewEnemyHealthPercentage;
 
+        [SerializeField]
         public List<EnemyAttack> EnemyAttacks = new List<EnemyAttack>();
 
         public bool BattleEnd;
         public BattleResult BattleResult;
 
-
+        [Serializable]
         public class EnemyAttack
         {
             public int HeroIndex;
             public int Damage;
             public int NewHeroHealth;
-            public float NewHearoHealthPercentage;
+            public float NewHeroHealthPercentage;
         }
         
     }

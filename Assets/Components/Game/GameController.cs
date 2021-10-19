@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Gram.GameSerialization;
 using Gram.Model;
@@ -11,15 +12,17 @@ namespace Gram.Game
         
         private IGameSerialization _gameSerializationService; 
         private IGameModel _gameModel;
-        
-        private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
-            
-            _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
 
+        private void Start() {
             _gameModel.OnChange+= SaveState;
 
             StartCoroutine(StartGameCoroutine());
+        }
+
+        private void Awake() {
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
+            
+            _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
         }
 
         private void SaveState() {

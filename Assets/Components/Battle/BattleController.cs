@@ -19,20 +19,22 @@ namespace Gram.Battle
         private IGameModel _gameModel;
         private IBattleModel _battleModel;
         private ICharacterDatabase _characterDatabase;
-        
-        
+
         private void Start() {
+            _gameModel.OnLogicStateChange += OnLogicStateChange;
+            
+            _battleModel.OnNewTurnExecuted += BattleModelOnOnNewTurnExecuted;
+            
+            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
+                heroBattleCharacter.GetSelectableHero().OnSelected += OnSelectHero;
+            }
+        }
+
+        private void Awake() {
             _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
             
             _battleModel = BasicDependencyInjector.Instance().GetObjectByType<IBattleModel>();
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
-            _gameModel.OnLogicStateChange += OnLogicStateChange;
-
-            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
-                heroBattleCharacter.GetSelectableHero().OnSelected += OnSelectHero;
-            }
-            
-            _battleModel.OnNewTurnExecuted += BattleModelOnOnNewTurnExecuted;
         }
 
         private void BattleModelOnOnNewTurnExecuted(BattleTurn turn) {
@@ -57,7 +59,7 @@ namespace Gram.Battle
                 bool attackInProgress = true;
                 EnemyBattleCharacters[0].Attack(() => {
                     HeroBattleCharacters[turn.EnemyAttacks[0].HeroIndex].Damage(attack.Damage, attack.NewHeroHealth, 
-                                                                                attack.NewHearoHealthPercentage,() => {
+                                                                                attack.NewHeroHealthPercentage,() => {
                         attackInProgress = false;
                     });
                 });
@@ -70,7 +72,11 @@ namespace Gram.Battle
             doneCallback?.Invoke();
         }
 
-        private void ToggleHeroSelection(bool activated) {  }
+        private void ToggleHeroSelection(bool activated) {
+            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
+                heroBattleCharacter.GetSelectableHero().ToggleSelectable(activated);
+            }
+        }
 
 
         private void OnLogicStateChange() {
@@ -87,6 +93,7 @@ namespace Gram.Battle
                     break;
                 case GameLogicState.Battle:
                     SetupBattleCharacters();
+                    ToggleHeroSelection(true);
                     ShowBattleScreen();
                     break;
             }
@@ -102,9 +109,9 @@ namespace Gram.Battle
             }
 
             Enemy enemy =_battleModel.GetEnemy();
-            CharacterConfiguration enemyConfiguration = _characterDatabase.GetEnemyCharacterConfigurationById(enemy.CharacterDataName);
 
-            EnemyBattleCharacters[0].Setup(enemyConfiguration, true);
+
+            EnemyBattleCharacters[0].Setup(enemy, true);
         }
 
         private void OnSelectHero(SelectableHero selectableHero) {

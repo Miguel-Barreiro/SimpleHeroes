@@ -87,7 +87,7 @@ namespace Gram.Model
                 HeroIndex = id, 
                 Damage = damage, 
                 NewHeroHealth = heroHealthLeft,
-                NewHearoHealthPercentage = heroHealthLeft/ (float)attackedHero.Health
+                NewHeroHealthPercentage = heroHealthLeft/ (float)attackedHero.Health
             };
             BattleTurn battleTurn = new BattleTurn() {
                 DamageToEnemy = damageToEnemy,

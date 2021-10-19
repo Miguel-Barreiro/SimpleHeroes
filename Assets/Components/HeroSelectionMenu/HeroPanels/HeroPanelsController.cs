@@ -17,10 +17,8 @@ namespace Gram.HeroSelectionMenu.HeroPanels
         private ICharacterDatabase _characterDatabase;
         
         
+        
         private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
-            _heroCollectionModel = BasicDependencyInjector.Instance().GetObjectByType<IHeroCollectionModel>();
-            _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
             _heroCollectionModel.OnHeroCollectionChange += UpdateHeroPanels;
 
             _gameModel.OnLogicStateChange += OnLogicStateChange;
@@ -30,7 +28,13 @@ namespace Gram.HeroSelectionMenu.HeroPanels
                 heroPanel.GetSelectableHero().OnSelected += OnSelectHero;
             }
         }
-        
+
+        private void Awake() {
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
+            _heroCollectionModel = BasicDependencyInjector.Instance().GetObjectByType<IHeroCollectionModel>();
+            _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
+        }
+
         private void OnDestroy() {
             foreach (HeroPanel heroPanel in HeroPanels) {
                 heroPanel.GetSelectableHero().OnSelected -= OnSelectHero;
@@ -74,7 +78,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
             List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
             int i = 0;
             foreach (Hero hero in heroesCollected) {
-                CharacterConfiguration charaterConfig = _characterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
+                CharacterConfiguration charaterConfig = _characterDatabase.GetCharacterConfigurationById(hero.CharacterDataName);
                 HeroPanels[i].SetHero(hero, charaterConfig);
                 HeroPanels[i].SetSelected(selectedHeroes.Contains(i));
                 i++;

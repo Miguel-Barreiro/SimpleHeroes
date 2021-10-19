@@ -1,3 +1,4 @@
+using System;
 using Gram.Core;
 using Gram.Model;
 using Gram.UI.HeroDetailsPopup;
@@ -31,16 +32,23 @@ namespace Gram.UI
             _hero = null;
             _characterConfiguration = null;
         }
-        
-        private void HandleSelected(PointerEventData data) { 
-            OnSelected?.Invoke(this);
+
+        private bool _selectable = true;
+        private void HandleSelected(PointerEventData data) {
+            if (_selectable) {
+                OnSelected?.Invoke(this);
+            }
         }
+
+        public void ToggleSelectable(bool isSelectable) {
+            _selectable = isSelectable;
+        }
+
+        
 
         private HeroDetailPopup _heroDetailPopup;
         private void HandleSelectedMore(PointerEventData data) {
             if (_hero != null) {
-                
-                
                 _heroDetailPopup = Instantiate(HeroDetailPopupPrefab);
                 int experienceNeeded = _gameDefinitions.GetExperienceNeededToLevel(_hero.Level);
                 _heroDetailPopup.ShowHeroDetails(_hero.CharacterDataName, _hero.Level, 
@@ -64,12 +72,13 @@ namespace Gram.UI
 
 
         private void Start() {
-            
-            _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
-
             Selectable.OnSelected += HandleSelected;
             Selectable.OnSelectMore += HandleSelectedMore;
             Selectable.OnSelectMoreEnd += HandleSelectedMoreEnd;
+        }
+
+        private void Awake() {
+            _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Gram.Core;
+using Gram.Model;
 using Gram.Utils;
 using Gram.Utils.AnimationUtils;
 using Unity.Mathematics;
@@ -22,17 +23,20 @@ namespace Gram.Battle
 
         
         private EndAnimationController _endAnimationController;
+        
         protected ICharacterDatabase CharacterDatabase;
-
         protected GameObject Visuals;
         protected Animator Animator;
+        protected CharacterConfiguration CharacterConfiguration;
         
-        protected void Start() {
+        protected void Awake() {
             CharacterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
         }
 
-        public virtual void Setup(CharacterConfiguration characterConfiguration, bool flip) {
-            Visuals = GameObject.Instantiate(characterConfiguration.BattlePrefab, transform.position, quaternion.identity, transform);
+        public void Setup(Character character, bool flip) {
+            CharacterConfiguration = CharacterDatabase.GetCharacterConfigurationById(character.CharacterDataName); 
+            Visuals = GameObject.Instantiate(CharacterConfiguration.BattlePrefab, transform.position, 
+                                                quaternion.identity, transform);
             if (flip) {
                 var localScale = Visuals.transform.localScale;
                 Vector3 newScale = new Vector3(-localScale.x, localScale.y, localScale.z);
@@ -40,6 +44,8 @@ namespace Gram.Battle
             }
             _endAnimationController = Visuals.GetComponent<EndAnimationController>();
             Animator = Visuals.GetComponent<Animator>();
+            
+            HealthBar.SetPercentage(character.CurrentHealth/(float)character.Health);
         }
 
         public void ResetCharacter() {
@@ -47,6 +53,7 @@ namespace Gram.Battle
             _endAnimationController = null;
         }
 
+        
 
         private readonly int ATTACK_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("attack"); 
         private readonly int DEATH_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("death"); 

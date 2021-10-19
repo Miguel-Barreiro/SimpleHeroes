@@ -14,7 +14,7 @@ namespace Gram.Core
         public string Id;
         public int InitialHealth;
         public int InitialAttackPower;
-
+        
         public string History;
         
     }
