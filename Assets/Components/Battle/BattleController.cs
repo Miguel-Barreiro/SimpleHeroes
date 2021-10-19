@@ -23,7 +23,7 @@ namespace Gram.Battle
         private void Start() {
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             
-            _battleModel.OnNewTurnExecuted += BattleModelOnOnNewTurnExecuted;
+            _battleModel.OnNewTurnExecuted += ExecuteNewTurn;
             
             foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
                 heroBattleCharacter.GetSelectableHero().OnSelected += OnSelectHero;
@@ -37,33 +37,55 @@ namespace Gram.Battle
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
         }
 
-        private void BattleModelOnOnNewTurnExecuted(BattleTurn turn) {
+        //-------------------------------------------------------------------------------
+
+        #region Turn Execution
+
+        private void ExecuteNewTurn(BattleTurn turn) {
             Debug.Log("new turn " + JsonUtility.ToJson(turn));
 
             ToggleHeroSelection(false);
-            
-            HeroBattleCharacters[turn.HeroIndexAttack].Attack(turn.DamageToEnemy, () => {
-                EnemyBattleCharacters[0].Damage(turn.DamageToEnemy, turn.NewEnemyHealth, 
-                                                    turn.NewEnemyHealthPercentage, () => {
-                    StartCoroutine(EnemyAttacksCoroutine(turn, () => {
-                        ToggleHeroSelection(true);
-                    }));
-                });
-            });
+
+            ExecutePlayerAttacks(turn, () => {ToggleHeroSelection(true);});
         }
 
+        private void ExecutePlayerAttacks(BattleTurn turn, Action doneCallback) {
 
+            HeroBattleCharacter attackingHero = GetHeroCharacterByNameId(turn.HeroNameIdAttack);
+            BattleCharacter attackedEnemy = EnemyBattleCharacters[0];
+
+            PerformAttack(attackingHero, attackedEnemy, turn.DamageToEnemy, 
+                          turn.NewEnemyHealth, turn.NewEnemyHealthPercentage,
+                          () => {
+                              ExecuteEnemyAttacks(turn, doneCallback);
+                          });
+        }
+
+        private HeroBattleCharacter GetHeroCharacterByNameId(string heroNameId) {
+            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
+                if (heroBattleCharacter.GetSelectableHero().GetNameId().Equals(heroNameId)) {
+                    return heroBattleCharacter;
+                }
+            }
+            return null;
+        }
+
+        private void ExecuteEnemyAttacks(BattleTurn turn, Action doneCallback) {
+            StartCoroutine(EnemyAttacksCoroutine(turn, doneCallback));
+        }
+        
         private IEnumerator EnemyAttacksCoroutine(BattleTurn turn, Action doneCallback) {
             foreach (BattleTurn.EnemyAttack attack in turn.EnemyAttacks) {
                 
                 bool attackInProgress = true;
-                EnemyBattleCharacters[0].Attack(attack.Damage, () => {
-                    HeroBattleCharacters[turn.EnemyAttacks[0].HeroIndex].Damage(attack.Damage, attack.NewHeroHealth, 
-                                                                                attack.NewHeroHealthPercentage,() => {
-                        attackInProgress = false;
-                    });
-                });
 
+                BattleCharacter heroAttacked = GetHeroCharacterByNameId(attack.HeroNameId);
+                
+                PerformAttack(EnemyBattleCharacters[0], heroAttacked, attack.Damage, 
+                              attack.NewHeroHealth, attack.NewHeroHealthPercentage,
+                              () => {
+                                  attackInProgress = false;
+                              });
                 while (attackInProgress) {
                     yield return null;
                 }
@@ -72,11 +94,26 @@ namespace Gram.Battle
             doneCallback?.Invoke();
         }
 
+        private void PerformAttack(BattleCharacter attacker, BattleCharacter attacked, int damage, int newAttackedHealth, float newAttackedHealthPercentage, Action doneCallback) {
+            attacker.Attack(damage, () => {
+                attacked.Damage(damage, newAttackedHealth, newAttackedHealthPercentage,() => {
+                    if (newAttackedHealth == 0) {
+                        attacked.Kill(doneCallback);
+                    } else {
+                        doneCallback?.Invoke();
+                    }
+                });
+            });
+        }
+        
+
         private void ToggleHeroSelection(bool activated) {
             foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
                 heroBattleCharacter.GetSelectableHero().ToggleSelectable(activated);
             }
         }
+
+        #endregion
 
 
         private void OnLogicStateChange() {
@@ -116,14 +153,7 @@ namespace Gram.Battle
         }
 
         private void OnSelectHero(SelectableHero selectableHero) {
-            int index = 0;
-            foreach (HeroBattleCharacter battleCharacter in HeroBattleCharacters) {
-                if (battleCharacter.GetSelectableHero() == selectableHero) {
-                    Debug.Log($"OnSelectHero index={index}");
-                    _battleModel.ExecuteTurn(index);
-                }
-                index++;
-            }
+            _battleModel.ExecuteTurn(selectableHero.GetNameId());
         }
         
    

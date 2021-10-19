@@ -8,12 +8,14 @@ namespace Gram.Model
         
         event GameBasics.SingleParameterDelegate<BattleTurn> OnNewTurnExecuted;
 
-        void GenerateBattle(List<int> participatingHeroIds, Enemy enemy);
+        void GenerateBattle(List<string> participatingHeroNameIds, Enemy enemy);
 
-        void ExecuteTurn(int chosenHeroIndex);
+        void ExecuteTurn(string chosenHeroNameId);
         
         Enemy GetEnemy();
 
         List<Hero> GetHeroes();
+        
+        void GenerateInitialState();
     }
 }

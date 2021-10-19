@@ -43,14 +43,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
 
         
         private void OnSelectHero(SelectableHero selectable) {
-            int heroIndex = 0;
-            foreach (HeroPanel heroPanel in HeroPanels) {
-                if (heroPanel.GetSelectableHero() == selectable) {
-                    _gameModel.TrySelectHero(heroIndex);    
-                }
-
-                heroIndex++;
-            }
+            _gameModel.TrySelectHero(selectable.GetNameId());    
         }
 
         
@@ -65,22 +58,23 @@ namespace Gram.HeroSelectionMenu.HeroPanels
 
         
         private void UpdateHeroSelection() {
-            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
-            int i = 0;
+            List<string> selectedHeroes = _gameModel.GetSelectedHeroNameIds();
             foreach (HeroPanel heroPanel in HeroPanels) {
-                heroPanel.SetSelected(selectedHeroes.Contains(i));
-                i++;
+                heroPanel.SetSelected(selectedHeroes.Contains(heroPanel.GetSelectableHero().GetNameId()));
             }
         }
         
         private void UpdateHeroPanels() {
             List<Hero> heroesCollected = _heroCollectionModel.GetCollectedHeroes();
-            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
+            List<string> selectedHeroes = _gameModel.GetSelectedHeroNameIds();
             int i = 0;
             foreach (Hero hero in heroesCollected) {
-                CharacterConfiguration charaterConfig = _characterDatabase.GetCharacterConfigurationById(hero.CharacterDataName);
-                HeroPanels[i].SetHero(hero, charaterConfig);
-                HeroPanels[i].SetSelected(selectedHeroes.Contains(i));
+                HeroPanel heroPanel = HeroPanels[i];
+                
+                CharacterConfiguration charaterConfig = _characterDatabase.GetCharacterConfigurationById(hero.CharacterNameId);
+                heroPanel.SetHero(hero, charaterConfig);
+                heroPanel.SetSelected(selectedHeroes.Contains(heroPanel.GetSelectableHero().GetNameId()));
+
                 i++;
             }
 

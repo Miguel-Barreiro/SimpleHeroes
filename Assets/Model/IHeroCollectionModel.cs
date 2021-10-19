@@ -9,9 +9,9 @@ namespace Gram.Model
         
         void GenerateInitialState();
 
-        Hero GetHeroById(int id);
+        Hero GetHeroByNameId(string nameId);
         
         List<Hero> GetCollectedHeroes();
-        List<Hero> GetHeroesById(List<int> heroIndexes);
+        List<Hero> GetHeroesByNameId(List<string> heroNameIds);
     }
 }

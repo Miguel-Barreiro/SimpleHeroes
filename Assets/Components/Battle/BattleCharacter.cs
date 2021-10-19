@@ -39,13 +39,16 @@ namespace Gram.Battle
         }
 
         public void Setup(Character character) {
-            CharacterConfiguration = CharacterDatabase.GetCharacterConfigurationById(character.CharacterDataName); 
+            CharacterConfiguration = CharacterDatabase.GetCharacterConfigurationById(character.CharacterNameId); 
             Visuals = GameObject.Instantiate(CharacterConfiguration.BattlePrefab, transform.position, 
                                                 quaternion.identity, transform);
             _endAnimationController = Visuals.GetComponent<EndAnimationController>();
             Animator = Visuals.GetComponent<Animator>();
             
             HealthBar.SetPercentage(character.CurrentHealth/(float)character.Health);
+            if (!character.IsAlive()) {
+                Animator.SetTrigger(FORCE_DEAD_ANIMATOR_PARAMETER);
+            }
         }
 
         public void ResetCharacter() {
@@ -59,7 +62,9 @@ namespace Gram.Battle
 
         private readonly int ATTACK_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("attack"); 
         private readonly int DEATH_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("death"); 
-        private readonly int HIT_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("hit"); 
+        private readonly int HIT_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("hit");
+        private readonly int FORCE_DEAD_ANIMATOR_PARAMETER = UnityEngine.Animator.StringToHash("forceDead");
+        
         
         public void Attack(int attackValue, Action doneCallback) {
             void EndAttackAnimationCallback(AnimationType type) {

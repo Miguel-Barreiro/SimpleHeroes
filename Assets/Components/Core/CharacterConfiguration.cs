@@ -7,11 +7,10 @@ namespace Gram.Core
     public class CharacterConfiguration : ScriptableObject
     {
         
-        [FormerlySerializedAs("HeroPortrait")] public Sprite Portrait; 
+        public Sprite Portrait; 
         public GameObject BattlePrefab;
-        public Vector3 Scale;
 
-        public string Id;
+        public string NameId;
         public int InitialHealth;
         public int InitialAttackPower;
         

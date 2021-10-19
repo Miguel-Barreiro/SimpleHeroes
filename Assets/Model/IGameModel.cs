@@ -16,9 +16,10 @@ namespace Gram.Model
         void GenerateInitialGameState();
 
 
-        void TrySelectHero(int heroIndex);
-        List<int> GetSelectedHeroIndexes();
+        void TrySelectHero(string heroNameId);
         
+        List<string> GetSelectedHeroNameIds();
+
         List<Hero> GetSelectedHeroes();
 
         GameLogicState GetCurrentLogicState();

@@ -69,10 +69,10 @@ namespace Gram.Core
 
             int index = 0;
             foreach (CharacterConfiguration characterConfiguration in AllCharacters) {
-                List<CharacterConfiguration> similarIds = AllCharacters.FindAll(configuration => configuration.Id.Equals(characterConfiguration.Id) );
+                List<CharacterConfiguration> similarIds = AllCharacters.FindAll(configuration => configuration.NameId.Equals(characterConfiguration.NameId) );
                 if (similarIds.Count > 1 ) {
                     
-                    Debug.LogError( $"non unique id found for { characterConfiguration.Id } in {index}" );
+                    Debug.LogError( $"non unique id found for { characterConfiguration.NameId } in {index}" );
                 }
 
                 index++;
@@ -84,7 +84,7 @@ namespace Gram.Core
         
         private void CreateCharacterConfigurationDictionary() {
             foreach (CharacterConfiguration characterConfiguration in AllCharacters) {
-                _characterConfigurationsById.Add(characterConfiguration.Id, characterConfiguration);
+                _characterConfigurationsById.Add(characterConfiguration.NameId, characterConfiguration);
             }
         }
 

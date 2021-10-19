@@ -35,7 +35,7 @@ namespace Gram.HeroSelectionMenu
         }
 
         private void UpdateHeroSelection() {
-            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
+            List<string> selectedHeroes = _gameModel.GetSelectedHeroNameIds();
             BattleButton.interactable = selectedHeroes.Count == _gameDefinitions.MaximumHeroesInBattle;
         }
 

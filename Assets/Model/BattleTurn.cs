@@ -7,7 +7,7 @@ namespace Gram.Model
 {
     public class BattleTurn
     {
-        public int HeroIndexAttack;
+        public string HeroNameIdAttack;
         public int DamageToEnemy;
         public int NewEnemyHealth;
         public float NewEnemyHealthPercentage;
@@ -21,7 +21,7 @@ namespace Gram.Model
         [Serializable]
         public class EnemyAttack
         {
-            public int HeroIndex;
+            public string HeroNameId;
             public int Damage;
             public int NewHeroHealth;
             public float NewHeroHealthPercentage;

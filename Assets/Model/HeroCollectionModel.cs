@@ -10,22 +10,22 @@ namespace Gram.Model
         
         public event GameBasics.SimpleDelegate OnHeroCollectionChange;
         
-
         public List<Hero> GetCollectedHeroes() {
             return _state.HeroesCollected;
         }
-
-        public Hero GetHeroById(int id) {
-            return _state.HeroesCollected[id];
+        public Hero GetHeroByNameId(string nameId) { 
+            return _state.HeroesCollected.Find(hero => hero.CharacterNameId.Equals(nameId));
         }
 
 
+        //to reduce garbage
         private readonly List<Hero> _getHeroesByIdResult = new List<Hero>();
-        public List<Hero> GetHeroesById(List<int> stateHeroes) {
-            
+        public  List<Hero> GetHeroesByNameId(List<string> heroNameIds){
             _getHeroesByIdResult.Clear();
-            foreach (int heroIndex in stateHeroes) {
-                _getHeroesByIdResult.Add(GetHeroById(heroIndex));
+            if (heroNameIds != null) {
+                foreach (string heroNameId in heroNameIds) {
+                    _getHeroesByIdResult.Add(GetHeroByNameId(heroNameId));
+                }
             }
             return _getHeroesByIdResult;
         }
@@ -71,7 +71,7 @@ namespace Gram.Model
                 Level = 0,
                 Health = heroCharacter.InitialHealth,
                 AttackPower = heroCharacter.InitialAttackPower,
-                CharacterDataName = heroCharacter.Id
+                CharacterNameId = heroCharacter.NameId
             };
             return newHero;
         }

@@ -195,12 +195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b7e526513664f8f827be4d7a1745f03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugameModel:
-    CurrentState:
-      HeroesCollected: []
-      SelectedHeroes: 
-      BattleCount: 0
-      CurrentLogicState: 0
 --- !u!4 &2089568542
 Transform:
   m_ObjectHideFlags: 0

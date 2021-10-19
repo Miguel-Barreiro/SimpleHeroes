@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Model
 {
@@ -7,13 +8,22 @@ namespace Gram.Model
     public class Character : IDamageable
     {
         [SerializeField]
-        public string CharacterDataName;
+        public string CharacterNameId;
 
         [SerializeField]
         public int Health;
 
         [SerializeField]
         public int CurrentHealth;
+
+
+        public int GetCurrentHealth() {
+            return CurrentHealth;
+        }
+        
+        public float GetCurrentHealthPercentage() {
+            return CurrentHealth / (float)Health;
+        }
 
         
         public void Damage(int damage) {
