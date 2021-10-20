@@ -4,14 +4,8 @@ using UnityEngine;
 namespace Gram.Model
 {
     [Serializable]
-    public class Hero
+    public class Hero : Character, IAttacks
     {
-
-        [SerializeField]
-        public string CharacterDataName;
-        
-        [SerializeField]
-        public int Health;
         [SerializeField]
         public int AttackPower;
         [SerializeField]
@@ -19,5 +13,7 @@ namespace Gram.Model
         [SerializeField]
         public int Level;
         
+        public int GetAttackDamage() { return AttackPower; }
+
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Gram.Core;
 using Gram.Model;
@@ -10,49 +11,43 @@ namespace Gram.HeroSelectionMenu
     public class HeroSelectionMenuController : MonoBehaviour
     {
 
+        [SerializeField] private GameObject[] MenuItems;
         [SerializeField] private Button BattleButton;
-        [SerializeField] private List<HeroPanel> HeroPanels;
         
-        private GameModel _gameModel;
-        private ICharacterDatabase _characterDatabase;
-        
+        private IGameModel _gameModel;
+        private GameDefinitions _gameDefinitions;
+
         private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
-            _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
-            _gameModel.OnHeroCollectionChange += UpdateHeroPanels;
 
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             _gameModel.OnSelectedHeroesChange += UpdateHeroSelection;
             
-            int panelIndex = 0;
-            foreach (HeroPanel heroPanel in HeroPanels) {
-                int heroIndex = panelIndex;
-                heroPanel.OnSelect += selected => {
-                    if (heroIndex < _gameModel.GetCollectedHeroes().Count) {
-                        _gameModel.TrySelectHero(heroIndex);
-                    }
-                };
-                panelIndex++;
-            }
+            BattleButton.onClick.AddListener(OnBattlePressed);
+        }
+
+        private void Awake() {
+            _gameDefinitions = BasicDependencyInjector.Instance().GetObjectByType<GameDefinitions>();
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
+        }
+
+        private void OnBattlePressed() {
+            _gameModel.GoToBattle();
         }
 
         private void UpdateHeroSelection() {
-            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
-            int i = 0;
-            foreach (HeroPanel heroPanel in HeroPanels) {
-                heroPanel.SetSelected(selectedHeroes.Contains(i));
-                i++;
-            }
+            List<string> selectedHeroes = _gameModel.GetSelectedHeroNameIds();
+            BattleButton.interactable = selectedHeroes.Count == _gameDefinitions.MaximumHeroesInBattle;
         }
 
         private void OnLogicStateChange() {
-            GameState.GameLogicState logicState = _gameModel.GetCurrentLogicState();
+            GameLogicState logicState = _gameModel.GetCurrentLogicState();
             switch (logicState) {
-                case GameState.GameLogicState.HeroSelection:
-                    UpdateHeroPanels();
+                case GameLogicState.HeroSelection:
                     ShowSelectionMenu();
+                    UpdateHeroSelection();
                     break;
-                case GameState.GameLogicState.Battle:
+                case GameLogicState.Battle:
+                    Debug.Log("GO TO BATTLE");
                     HideSelectionMenu();
                     break;
             }
@@ -60,27 +55,17 @@ namespace Gram.HeroSelectionMenu
         }
 
         private void HideSelectionMenu() {
-            
+            foreach (GameObject menuItem in MenuItems) {
+                menuItem.SetActive(false);
+            }
         }
 
         private void ShowSelectionMenu() {
-            
-        }
-
-        private void UpdateHeroPanels() {
-            List<Hero> heroesCollected = _gameModel.GetCollectedHeroes();
-            List<int> selectedHeroes = _gameModel.GetSelectedHeroIndexes();
-            int i = 0;
-            foreach (Hero hero in heroesCollected) {
-                CharacterConfiguration charaterConfig = _characterDatabase.GetHeroCharacterConfigurationById(hero.CharacterDataName);
-                HeroPanels[i].SetHero(charaterConfig);
-                HeroPanels[i].SetSelected(selectedHeroes.Contains(i));
-                i++;
-            }
-
-            for (; i < HeroPanels.Count; i++) {
-                HeroPanels[i].SetEmpty();
+            foreach (GameObject menuItem in MenuItems) {
+                menuItem.SetActive(true);
             }
         }
+
+
     }
 }

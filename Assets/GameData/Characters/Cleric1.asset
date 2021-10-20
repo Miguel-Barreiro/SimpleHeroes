@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924c082338e44851b61cb52a112495a0, type: 3}
   m_Name: Cleric1
   m_EditorClassIdentifier: 
-  HeroPortrait: {fileID: 21300000, guid: 4a26669191b863649b5738160131de05, type: 3}
+  Portrait: {fileID: 21300000, guid: 4a26669191b863649b5738160131de05, type: 3}
   BattlePrefab: {fileID: 100030, guid: f8b4a2d41cb844d599ad77a0f3afc4cc, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
-  Name: Claire
-  InitialHealth: 20
+  NameId: Claire
+  InitialHealth: 10
   InitialAttackPower: 2
   History: Follows the right path

@@ -10,22 +10,27 @@ namespace Gram.Game
     {
         
         private IGameSerialization _gameSerializationService; 
-        private GameModel _gameModel;
-        
-        
-        private void Start() {
-            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<GameModel>();
-            _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
+        private IGameModel _gameModel;
 
-            _gameModel.OnLogicStateChange += OnLogicStateGameStateChange;
+        private void Start() {
+            _gameModel.OnChange+= SaveState;
 
             StartCoroutine(StartGameCoroutine());
         }
 
+        private void Awake() {
+            _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
+            
+            _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
+        }
+
+        private void SaveState() {
+            _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
+                
+            });
+        }
+
         private IEnumerator StartGameCoroutine() {
-            
-            //we need to wait until the unity start phase ends
-            
             yield return null;
             
             _gameSerializationService.LoadGame(state => {
@@ -40,11 +45,6 @@ namespace Gram.Game
                 }
             });
         }
-
-        private void OnLogicStateGameStateChange() {
-            _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
-                
-            });
-        }
+        
     }
 }

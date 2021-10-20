@@ -1,52 +1,70 @@
+using System;
 using System.Collections.Generic;
 using Gram.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Model
 {
-    public class GameModel
+    public class GameModel : IGameModel
     {
 
-        public delegate void GameModelDelegate();
+        public event GameBasics.SimpleDelegate OnLogicStateChange;
+        public event GameBasics.SimpleDelegate OnSelectedHeroesChange;
 
-        public event GameModelDelegate OnLogicStateChange;
-        public event GameModelDelegate OnHeroCollectionChange;
-        
-        public event GameModelDelegate OnSelectedHeroesChange;
-        
-        private GameState _currentState;
+        public event GameBasics.SimpleDelegate OnChange;
 
-        private CharacterDatabase _characterDatabase;
-        private GameDefinitions _gameDefinitions;
-        
-        
-        public GameModel(GameDefinitions gameDefinitions, CharacterDatabase characterDatabase) {
+        public GameModel(HeroCollectionModel heroCollectionModel, IBattleModel battleModel, GameDefinitions gameDefinitions, CharacterDatabase characterDatabase) {
             _characterDatabase = characterDatabase;
             _gameDefinitions = gameDefinitions;
+            _battleModel = battleModel;
+            _heroCollectionModel = heroCollectionModel;
+            
+            _battleModel.OnNewTurnExecuted += turn => {
+                OnChange?.Invoke();
+            };
+
         }
 
         //-------------------------------------------------------------------------------
 
         #region GameState
 
+        private class FullModelState
+        {
+            [SerializeField]
+            public string GameModelState;
+            [SerializeField]
+            public string HeroCollectionModelState;
+            [SerializeField]
+            public string BattleModelState;
+        }
+        private static readonly FullModelState FullModelStateUtility = new FullModelState();
 
         public string GetSerializedGameState() {
-            return JsonUtility.ToJson(_currentState);
+            
+            FullModelStateUtility.GameModelState =JsonUtility.ToJson(_state);
+            FullModelStateUtility.BattleModelState = _battleModel.GetSerializedGameState();
+            FullModelStateUtility.HeroCollectionModelState = _heroCollectionModel.GetSerializedGameState();
+            
+            return JsonUtility.ToJson(FullModelStateUtility);
         }
         public void RestoreGameState(string newGameState) {
-            GameState gameState = JsonUtility.FromJson<GameState>(newGameState);
-            _currentState = gameState;
+            FullModelState fullModelState = JsonUtility.FromJson<FullModelState>(newGameState);
+            _heroCollectionModel.RestoreGameState(fullModelState.HeroCollectionModelState);
+            _battleModel.RestoreGameState(fullModelState.BattleModelState);
+            _state = JsonUtility.FromJson<State>(fullModelState.GameModelState);
         }
         public void GenerateInitialGameState() {
 
-            _currentState = new GameState() {
-                HeroesCollected = new List<Hero>(),
+            _state = new State() {
                 BattleCount = 0,
-                SelectedHeroes = new List<int>(),
-                CurrentLogicState = GameState.GameLogicState.HeroSelection
+                SelectedHeroNameIds = new List<string>(),
+                CurrentLogicState = GameLogicState.HeroSelection
             };
 
-            GenerateInitialHeroes();
+            _heroCollectionModel.GenerateInitialState();
+            _battleModel.GenerateInitialState();
         }
         
 
@@ -55,31 +73,37 @@ namespace Gram.Model
 
         //-------------------------------------------------------------------------------
 
-        #region Hero Collections
+        #region Hero Selection
 
-        public void TrySelectHero(int heroIndex) {
-            if (_currentState.CurrentLogicState == GameState.GameLogicState.HeroSelection) {
+        public void TrySelectHero(string heroNameId) {
+            if (_state.CurrentLogicState == GameLogicState.HeroSelection) {
 
-                if (_currentState.SelectedHeroes.Contains(heroIndex)) {
-                    _currentState.SelectedHeroes.Remove(heroIndex);
+                if (_state.SelectedHeroNameIds.Contains(heroNameId)) {
+                    _state.SelectedHeroNameIds.Remove(heroNameId);
                     OnSelectedHeroesChange?.Invoke();
-                } else if( _currentState.SelectedHeroes.Count < _gameDefinitions.MaximumHeroesInBattle &&
-                           heroIndex < _currentState.HeroesCollected.Count &&  heroIndex > 0){
-                    _currentState.SelectedHeroes.Add(heroIndex);
+                } else if( _state.SelectedHeroNameIds.Count < _gameDefinitions.MaximumHeroesInBattle &&
+                           _heroCollectionModel.GetHeroByNameId(heroNameId) != null ){
+                    _state.SelectedHeroNameIds.Add(heroNameId);
                     OnSelectedHeroesChange?.Invoke();
                 }
             }
         }
 
-        public List<int> GetSelectedHeroIndexes() {
-            return _currentState.SelectedHeroes;
+        public List<string> GetSelectedHeroNameIds() {
+            return _state.SelectedHeroNameIds;
         }
 
-        public List<Hero> GetCollectedHeroes() {
-            return _currentState.HeroesCollected;
+        public List<Hero> GetSelectedHeroes() {
+            List<Hero> result = new List<Hero>();
+
+            foreach (string selectedHeroNameId in _state.SelectedHeroNameIds) {
+                Hero selectedHero = _heroCollectionModel.GetHeroByNameId(selectedHeroNameId);
+                result.Add(selectedHero);
+            }
+            
+            return result;
         }
 
-        
         #endregion
 
 
@@ -89,14 +113,33 @@ namespace Gram.Model
 
         #region GameLogic state
 
-        public GameState.GameLogicState GetCurrentLogicState() {
-            return _currentState.CurrentLogicState;
+        public GameLogicState GetCurrentLogicState() {
+            return _state.CurrentLogicState;
         }
         
 
         public void StartGameLoop() {
+            OnChange?.Invoke();
             OnLogicStateChange?.Invoke();
         }
+
+        public void GoToBattle() {
+            Enemy enemyForBattle = GenerateEnemyForBattle(_state.BattleCount);
+            _battleModel.GenerateBattle(_state.SelectedHeroNameIds, enemyForBattle);
+            
+            _state.CurrentLogicState = GameLogicState.Battle;
+            OnChange?.Invoke();
+            OnLogicStateChange?.Invoke();
+        }
+
+
+        public void GotoHeroSelection() {
+            _state.CurrentLogicState = GameLogicState.HeroSelection;
+            _state.SelectedHeroNameIds.Clear();
+            OnChange?.Invoke();
+            OnLogicStateChange?.Invoke();
+        }
+
 
         #endregion
 
@@ -107,27 +150,41 @@ namespace Gram.Model
 
         #region Internal utils
 
-        private void GenerateInitialHeroes() {
-            
-            int numberHeroes = _gameDefinitions.InitialNumberHeroes;
-            
-            List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetHeroCharactersData(numberHeroes);
-            foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
-                _currentState.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
-            }
-        }
+        [Serializable]
+        private class State
+        {
+            [SerializeField]
+            public List<string> SelectedHeroNameIds;
 
-        private Hero GenerateNewHero(CharacterConfiguration heroCharacter) {
-            Hero newHero = new Hero() {
-                Experience = 0,
-                Level = 0,
-                Health = heroCharacter.InitialHealth,
-                AttackPower = heroCharacter.InitialAttackPower,
-                CharacterDataName = heroCharacter.Id
+            [SerializeField]
+            public int BattleCount;
+
+            [SerializeField]
+            public GameLogicState CurrentLogicState;
+
+        }
+        private State _state;
+
+        private IHeroCollectionModel _heroCollectionModel;
+        private IBattleModel _battleModel;
+
+        private ICharacterDatabase _characterDatabase;
+        private GameDefinitions _gameDefinitions;
+
+
+
+        private Enemy GenerateEnemyForBattle(int stateBattleCount) {
+            CharacterConfiguration enemyCharacterData = _characterDatabase.GetRandomEnemyCharacterData();
+            Enemy newEnemy = new Enemy() {
+                Health = enemyCharacterData.InitialHealth,
+                AttackPower = enemyCharacterData.InitialAttackPower,
+                CharacterNameId = enemyCharacterData.NameId
             };
-            return newHero;
+            return newEnemy;
         }
 
+        
+        
         #endregion
 
 
