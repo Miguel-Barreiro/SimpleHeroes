@@ -47,7 +47,9 @@ namespace Gram.HeroSelectionMenu
                     UpdateHeroSelection();
                     break;
                 case GameLogicState.Battle:
-                    Debug.Log("GO TO BATTLE");
+                    HideSelectionMenu();
+                    break;
+                case GameLogicState.ShowResult:
                     HideSelectionMenu();
                     break;
             }

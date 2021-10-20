@@ -8,10 +8,11 @@ namespace Gram.Model
         event GameBasics.SimpleDelegate OnHeroCollectionChange;
         
         void GenerateInitialState();
+        void AddNewRandomHeroes(int numberHeroesToReward);
 
         Hero GetHeroByNameId(string nameId);
         
-        List<Hero> GetCollectedHeroes();
-        List<Hero> GetHeroesByNameId(List<string> heroNameIds);
+        Hero[] GetCollectedHeroes();
+        Hero[] GetHeroesByNameId(List<string> heroNameIds);
     }
 }

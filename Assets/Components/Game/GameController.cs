@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using Gram.GameSerialization;
 using Gram.Model;
 using Gram.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Gram.Game
 {
@@ -12,6 +14,11 @@ namespace Gram.Game
         private IGameSerialization _gameSerializationService; 
         private IGameModel _gameModel;
 
+        [SerializeField]
+        private string HeroSelectionSceneName;
+        [SerializeField]
+        private string BattleSceneName;
+
         private void Start() {
             _gameModel.OnChange+= SaveState;
 
@@ -20,7 +27,6 @@ namespace Gram.Game
 
         private void Awake() {
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
-            
             _gameSerializationService = BasicDependencyInjector.Instance().GetObjectByType<IGameSerialization>();
         }
 
@@ -37,13 +43,32 @@ namespace Gram.Game
                 if (state == null) {
                     _gameModel.GenerateInitialGameState();
                     _gameSerializationService.SaveGame(_gameModel.GetSerializedGameState(), () => {
-                        _gameModel.StartGameLoop();
+                        LoadScenes(() => { _gameModel.StartGameLoop(); });
                     });
                 } else {
                     _gameModel.RestoreGameState(state);
-                    _gameModel.StartGameLoop();
+                    LoadScenes(() => { _gameModel.StartGameLoop(); });
                 }
             });
+        }
+
+        private void LoadScenes(Action doneCallback) {
+            StartCoroutine(LoadScenesCoroutine(doneCallback));
+        }
+        
+        private IEnumerator LoadScenesCoroutine(Action doneCallback)
+        {
+
+            AsyncOperation asyncLoadHeroSelection = SceneManager.LoadSceneAsync(HeroSelectionSceneName,LoadSceneMode.Additive);
+            AsyncOperation asyncLoadBattle = SceneManager.LoadSceneAsync(BattleSceneName,LoadSceneMode.Additive);
+
+            // Wait until the asynchronous scene fully loads
+            while (!asyncLoadHeroSelection.isDone || !asyncLoadBattle.isDone)
+            {
+                yield return null;
+            }
+            
+            doneCallback?.Invoke();
         }
         
     }

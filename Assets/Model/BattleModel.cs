@@ -19,6 +19,9 @@ namespace Gram.Model
             public Enemy Enemy;
             [SerializeField]
             public List<string> ParticipatingHeroNameIds = new List<string>();
+
+            [SerializeField]
+            public BattleTurn LastTurn;
         }
 
         public void GenerateInitialState() {
@@ -49,18 +52,22 @@ namespace Gram.Model
             return _state.Enemy;
         }
 
+        public BattleTurn GetLastTurn() {
+            return _state.LastTurn;
+        }
+        
 
         //to reduce garbage/ improve perfomance
         private readonly List<Hero> _participatingHeroesCache = new List<Hero>();
 
         private void FillParticipatingHeroesCache() {
             _participatingHeroesCache.Clear();
-            List<Hero> participatingHeroes = _heroCollectionModel.GetHeroesByNameId(_state.ParticipatingHeroNameIds);
+            Hero[] participatingHeroes = _heroCollectionModel.GetHeroesByNameId(_state.ParticipatingHeroNameIds);
             _participatingHeroesCache.AddRange(participatingHeroes);
         }
 
-        public List<Hero> GetParticipatingHeroes() {
-            return _participatingHeroesCache;
+        public Hero[] GetParticipatingHeroes() {
+            return _participatingHeroesCache.ToArray();
         }
 
 
@@ -124,6 +131,8 @@ namespace Gram.Model
                 };
                 FillHeroResults(battleTurn);
             }
+
+            _state.LastTurn = battleTurn;
             OnNewTurnExecuted?.Invoke(battleTurn);
         }
 
@@ -134,24 +143,28 @@ namespace Gram.Model
             };
 
             FillHeroResults(battleTurn);
-            
+
+            _state.LastTurn = battleTurn;
             OnNewTurnExecuted?.Invoke(battleTurn);
         }
 
         private void FillHeroResults(BattleTurn battleTurn) {
-            foreach (Hero hero in GetParticipatingHeroes()) {
+            
+            Hero[] participatingHeroes = GetParticipatingHeroes();
+            
+            foreach (Hero hero in participatingHeroes) {
+
+                Debug.Log("battle end for " + hero.CharacterNameId);
+                
                 BattleTurn.HeroResult heroResult = new BattleTurn.HeroResult() {
                     Hero = hero
                 };
                 battleTurn.BattleEndResult.HeroResults.Add(heroResult);
 
                 if (hero.IsAlive()) {
-                    heroResult.WasDead = false;
                     AwardExperience(hero, _gameDefinitions.ExperienceGainedPerBattle, out int levelsGained);
                     heroResult.LevelsGained = levelsGained;
                     heroResult.ExperienceGained = _gameDefinitions.ExperienceGainedPerBattle;
-                } else {
-                    heroResult.WasDead = true;
                 }
             }
         }
@@ -159,7 +172,7 @@ namespace Gram.Model
         private void AwardExperience(Hero hero, int experienceReward, out int levelsGained) {
             hero.Experience += experienceReward;
             if (hero.Experience >= _gameDefinitions.ExperienceLevelUp) {
-                int experienceLeft = Math.DivRem(hero.Experience, _gameDefinitions.ExperienceLevelUp, out levelsGained);
+                levelsGained = Math.DivRem(hero.Experience, _gameDefinitions.ExperienceLevelUp, out int experienceLeft);
                 hero.Experience =  experienceLeft;
                 for (int i = 0; i < levelsGained; i++) {
                     hero.AttackPower += Mathf.CeilToInt(hero.AttackPower * _gameDefinitions.AttackPowerPercentageGainedPerLevel);
@@ -179,17 +192,23 @@ namespace Gram.Model
 
 
         private bool IsAnyHeroLeft() {
-            List<Hero> heroes = GetParticipatingHeroes();
-            heroes.RemoveAll(possibleHero => !possibleHero.IsAlive());
-            return heroes.Count > 0;
+            Hero[] heroes = GetParticipatingHeroes();
+            int aliveHeroes = 0;
+            foreach (Hero hero in heroes) {
+                if (hero.IsAlive()) {
+                    aliveHeroes++;
+                }
+            }
+            return aliveHeroes> 0;
         }
 
         private Hero GetRandomAliveHero() {
-            List<Hero> possibleHeroes = GetParticipatingHeroes();
-            possibleHeroes.RemoveAll(possibleHero => !possibleHero.IsAlive());
-            if (possibleHeroes.Count > 0) {
-                int randomIndex = Random.Range(0, possibleHeroes.Count);
-                return possibleHeroes[randomIndex];
+            Hero[] possibleHeroes = GetParticipatingHeroes();
+            List<Hero> heroList = new List<Hero>(possibleHeroes);
+            heroList.RemoveAll(possibleHero => !possibleHero.IsAlive());
+            if (heroList.Count > 0) {
+                int randomIndex = Random.Range(0, heroList.Count);
+                return heroList[randomIndex];
             } else {
                 return null;
             }

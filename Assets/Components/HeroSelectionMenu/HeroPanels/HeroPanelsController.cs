@@ -65,7 +65,7 @@ namespace Gram.HeroSelectionMenu.HeroPanels
         }
         
         private void UpdateHeroPanels() {
-            List<Hero> heroesCollected = _heroCollectionModel.GetCollectedHeroes();
+            Hero[] heroesCollected = _heroCollectionModel.GetCollectedHeroes();
             List<string> selectedHeroes = _gameModel.GetSelectedHeroNameIds();
             int i = 0;
             foreach (Hero hero in heroesCollected) {
