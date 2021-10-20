@@ -43,6 +43,10 @@ namespace Gram.Model
             public int LevelsGained = 0;
             [SerializeField]
             public int ExperienceGained = 0;
+            [SerializeField]
+            public int HealthGained = 0;
+            [SerializeField]
+            public int AttackPowerGained = 0;
         }
         
         

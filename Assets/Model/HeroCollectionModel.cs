@@ -46,18 +46,22 @@ namespace Gram.Model
 
 
         public void AddNewRandomHeroes(int numberHeroes) {
-            
-            List<CharacterConfiguration> excludingList = new List<CharacterConfiguration>();
-            foreach (Hero hero in _state.HeroesCollected) {
-                CharacterConfiguration characterConfiguration = _characterDatabase.GetCharacterConfigurationById(hero.CharacterNameId);
-                excludingList.Add(characterConfiguration);
+            if (_state.HeroesCollected.Count < _gameDefinitions.MaximumHeroes) {
+                List<CharacterConfiguration> excludingList = new List<CharacterConfiguration>();
+                foreach (Hero hero in _state.HeroesCollected) {
+                    CharacterConfiguration characterConfiguration = _characterDatabase.GetCharacterConfigurationById(hero.CharacterNameId);
+                    excludingList.Add(characterConfiguration);
+                }
+
+                List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetMultipleRandomHeroCharactersData(numberHeroes, excludingList);
+                foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
+                    if (_state.HeroesCollected.Count < _gameDefinitions.MaximumHeroes) {
+                        _state.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
+                    }
+                }
+
+                OnHeroCollectionChange?.Invoke();
             }
-            List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetMultipleRandomHeroCharactersData(numberHeroes, excludingList);
-            foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
-                _state.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
-            }
-            
-            OnHeroCollectionChange?.Invoke();
         }
 
         

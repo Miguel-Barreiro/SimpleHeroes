@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100032, guid: c24e1bd7368d84d4ab1bd3451f7afd21, type: 3}
   NameId: Barb
   InitialHealth: 30
-  InitialAttackPower: 2
+  InitialAttackPower: 5
   History: Always been very tough

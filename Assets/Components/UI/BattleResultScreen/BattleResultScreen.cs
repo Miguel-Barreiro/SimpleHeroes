@@ -67,7 +67,7 @@ namespace Gram.UI
                 if (!heroResult.Hero.IsAlive()) {
                     heroResultPanel.Result.text = "DEAD";
                 }else if (heroResult.LevelsGained > 0) {
-                    heroResultPanel.Result.text = $"Level up ({heroResult.Hero.Level})";
+                    heroResultPanel.Result.text = $"Level up ({heroResult.Hero.Level}) \n +{ heroResult.HealthGained} hp \n +{ heroResult.AttackPowerGained} atk";
                 } else {
                     heroResultPanel.Result.text = $"xp reached {heroResult.Hero.Experience}/{_gameDefinitions.ExperienceLevelUp}";
                 }

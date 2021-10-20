@@ -15,6 +15,6 @@ MonoBehaviour:
   Portrait: {fileID: 21300000, guid: 461731fb3cb852a42ad79554cd6b446d, type: 3}
   BattlePrefab: {fileID: 100028, guid: 47775efaed9da4f22b814cf58dcc27d7, type: 3}
   NameId: ol Ogre
-  InitialHealth: 10
+  InitialHealth: 20
   InitialAttackPower: 222
   History: Very tough opponent

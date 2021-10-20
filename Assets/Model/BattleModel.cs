@@ -162,21 +162,29 @@ namespace Gram.Model
                 battleTurn.BattleEndResult.HeroResults.Add(heroResult);
 
                 if (hero.IsAlive()) {
-                    AwardExperience(hero, _gameDefinitions.ExperienceGainedPerBattle, out int levelsGained);
-                    heroResult.LevelsGained = levelsGained;
+                    AwardExperience(hero, _gameDefinitions.ExperienceGainedPerBattle, 
+                                    out heroResult.LevelsGained, 
+                                    out heroResult.AttackPowerGained, 
+                                    out heroResult.HealthGained );
                     heroResult.ExperienceGained = _gameDefinitions.ExperienceGainedPerBattle;
                 }
             }
         }
 
-        private void AwardExperience(Hero hero, int experienceReward, out int levelsGained) {
+        private void AwardExperience(Hero hero, int experienceReward, out int levelsGained, out int attackPowerGained, out int healthGained) {
             hero.Experience += experienceReward;
+            healthGained = 0;
+            attackPowerGained = 0;
             if (hero.Experience >= _gameDefinitions.ExperienceLevelUp) {
                 levelsGained = Math.DivRem(hero.Experience, _gameDefinitions.ExperienceLevelUp, out int experienceLeft);
                 hero.Experience =  experienceLeft;
                 for (int i = 0; i < levelsGained; i++) {
-                    hero.AttackPower += Mathf.CeilToInt(hero.AttackPower * _gameDefinitions.AttackPowerPercentageGainedPerLevel);
-                    hero.Health+=Mathf.CeilToInt(hero.Health *  _gameDefinitions.HealthPercentageGainedPerLevel);
+                    int heroAttackPowerDelta = Mathf.CeilToInt(hero.AttackPower * _gameDefinitions.AttackPowerPercentageGainedPerLevel);
+                    int healthGainedDelta= Mathf.CeilToInt(hero.Health *  _gameDefinitions.HealthPercentageGainedPerLevel);
+                    attackPowerGained += heroAttackPowerDelta;
+                    healthGained += healthGainedDelta;
+                    hero.AttackPower += heroAttackPowerDelta;
+                    hero.Health+=healthGainedDelta;
                 }
                 hero.Level+= levelsGained;
             } else {

@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100010, guid: 3690a9e9c3ad44f6ea7574e18f077420, type: 3}
   NameId: knight 5
   InitialHealth: 60
-  InitialAttackPower: 5
+  InitialAttackPower: 2
   History: full armor

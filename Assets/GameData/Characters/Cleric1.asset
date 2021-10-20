@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100030, guid: f8b4a2d41cb844d599ad77a0f3afc4cc, type: 3}
   NameId: Claire
   InitialHealth: 10
-  InitialAttackPower: 2
+  InitialAttackPower: 8
   History: Follows the right path
