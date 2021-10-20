@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100020, guid: ff666b48d3d694a549f8bf5670f7b88a, type: 3}
   NameId: Peasant 1
   InitialHealth: 50
-  InitialAttackPower: 1
+  InitialAttackPower: 2
   History: farms well xp

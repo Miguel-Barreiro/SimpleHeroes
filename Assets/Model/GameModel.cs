@@ -118,7 +118,6 @@ namespace Gram.Model
         
 
         public void StartGameLoop() {
-  
             OnLogicStateChange?.Invoke();
         }
 

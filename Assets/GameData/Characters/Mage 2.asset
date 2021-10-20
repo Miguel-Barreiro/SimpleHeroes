@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100030, guid: b0cec73513844499fb74f7d0ce05846f, type: 3}
   NameId: Marge
   InitialHealth: 15
-  InitialAttackPower: 1
+  InitialAttackPower: 9
   History: she puts u in a spell
