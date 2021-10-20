@@ -1,13 +1,19 @@
-namespace Model
-{
-    public class Hero
-    {
-        public string Name;
-        public int Health;
-        public int AttackPower;
-        public int Experience;
-        public int Level;
+using System;
+using UnityEngine;
 
+namespace Gram.Model
+{
+    [Serializable]
+    public class Hero : Character, IAttacks
+    {
+        [SerializeField]
+        public int AttackPower;
+        [SerializeField]
+        public int Experience;
+        [SerializeField]
+        public int Level;
         
+        public int GetAttackDamage() { return AttackPower; }
+
     }
 }
