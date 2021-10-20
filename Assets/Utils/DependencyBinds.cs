@@ -21,7 +21,7 @@ namespace Gram.Utils
 
         public virtual void FillBinds(Dictionary<Type, object> objectsByType) {
             HeroCollectionModel heroCollectionModel = new HeroCollectionModel(CharacterDatabase, GameDefinitions);
-            BattleModel battleModel = new BattleModel(heroCollectionModel);
+            BattleModel battleModel = new BattleModel(heroCollectionModel, GameDefinitions);
             GameModel gameModel = new GameModel(heroCollectionModel, battleModel,GameDefinitions, CharacterDatabase);
             GameSerializationController gameSerializationController = new GameSerializationController();
             

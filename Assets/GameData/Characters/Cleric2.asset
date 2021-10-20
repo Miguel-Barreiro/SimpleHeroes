@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924c082338e44851b61cb52a112495a0, type: 3}
   m_Name: Cleric2
   m_EditorClassIdentifier: 
-  HeroPortrait: {fileID: 21300000, guid: 4d74e1d278c84be47833006166b1a959, type: 3}
+  Portrait: {fileID: 0}
   BattlePrefab: {fileID: 100030, guid: 7896ac8babea84020a21df2a748173f7, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
-  Id: notClaire
-  InitialHealth: 20
+  NameId: clarence
+  InitialHealth: 15
   InitialAttackPower: 2
   History: Follows the right path

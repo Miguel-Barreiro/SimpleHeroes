@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Portrait: {fileID: 21300000, guid: 3d82aad3e3dedf24ebac3a08ed5327ee, type: 3}
   BattlePrefab: {fileID: 100032, guid: e68a39fc88f9644c881f6e31aa8096e4, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
-  Id: Barb
-  InitialHealth: 50
+  NameId: Barbara
+  InitialHealth: 20
   InitialAttackPower: 4
   History: Always been very tough

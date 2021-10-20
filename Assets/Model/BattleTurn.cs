@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gram.Model
 {
@@ -16,8 +15,28 @@ namespace Gram.Model
         public List<EnemyAttack> EnemyAttacks = new List<EnemyAttack>();
 
         public bool BattleEnd;
-        public BattleResult BattleResult;
-
+        public BattleResult BattleEndResult;
+        
+        [Serializable]
+        public class BattleResult
+        {
+            public bool PlayerWon;
+            [SerializeField]
+            public List<HeroResult> HeroResults = new List<BattleTurn.HeroResult>();
+        }
+        
+        [Serializable]
+        public class HeroResult
+        {
+            [SerializeField]
+            public Hero Hero;
+            
+            public bool WasDead;
+            public int LevelsGained = 0;
+            public int ExperienceGained = 0;
+        }
+        
+        
         [Serializable]
         public class EnemyAttack
         {

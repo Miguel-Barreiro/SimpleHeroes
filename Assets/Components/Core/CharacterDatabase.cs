@@ -71,7 +71,6 @@ namespace Gram.Core
             foreach (CharacterConfiguration characterConfiguration in AllCharacters) {
                 List<CharacterConfiguration> similarIds = AllCharacters.FindAll(configuration => configuration.NameId.Equals(characterConfiguration.NameId) );
                 if (similarIds.Count > 1 ) {
-                    
                     Debug.LogError( $"non unique id found for { characterConfiguration.NameId } in {index}" );
                 }
 

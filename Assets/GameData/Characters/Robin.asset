@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Portrait: {fileID: 21300000, guid: b523f9af8055ed1478360d2e85f4eab7, type: 3}
   BattlePrefab: {fileID: 100038, guid: 906d3a7b7b8ac4639994a032068c699a, type: 3}
-  Scale: {x: 1, y: 1, z: 1}
-  Id: Robin
-  InitialHealth: 20
+  NameId: Robin
+  InitialHealth: 15
   InitialAttackPower: 5
   History: A very merry man

@@ -133,7 +133,7 @@ namespace Gram.Model
         }
 
 
-        public void Retreat() {
+        public void GotoHeroSelection() {
             _state.CurrentLogicState = GameLogicState.HeroSelection;
             _state.SelectedHeroNameIds.Clear();
             OnChange?.Invoke();

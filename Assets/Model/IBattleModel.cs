@@ -14,7 +14,7 @@ namespace Gram.Model
         
         Enemy GetEnemy();
 
-        List<Hero> GetHeroes();
+        List<Hero> GetParticipatingHeroes();
         
         void GenerateInitialState();
     }

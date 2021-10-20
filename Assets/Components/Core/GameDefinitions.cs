@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Gram.Core
 {
@@ -17,7 +18,16 @@ namespace Gram.Core
         [Range(1,99)]
         public int ExperienceLevelUp = 5;
 
+        [Range(1,20)]
+        public int ExperienceGainedPerBattle = 1;
+        
+        [Range(0,2)]
+        public float HealthPercentageGainedPerLevel = 0.1f;
 
+        [Range(0,2)]
+        public float AttackPowerPercentageGainedPerLevel = 0.1f;
+        
+        
         private void OnValidate() {
             InitialNumberHeroes = Mathf.Clamp(InitialNumberHeroes, 1, MaximumHeroes);
             MaximumHeroesInBattle = Mathf.Clamp(MaximumHeroesInBattle, 1, MaximumHeroes);

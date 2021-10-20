@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gram.Model
 {
@@ -37,7 +36,6 @@ namespace Gram.Model
         public void Heal() {
             CurrentHealth = Health;
         }
-
         
         public bool IsAlive() {
             return CurrentHealth > 0;

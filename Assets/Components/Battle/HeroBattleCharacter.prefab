@@ -106,7 +106,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7445e933edfd4154b8f6f46f6ee91725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates: []
 --- !u!114 &6707018859365751222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a219d996ab842188aca2a02d6741f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HealthTooltip: {fileID: 5415158787690366087}
+  CharacterTooltip: {fileID: 5415158787690366087}
   HealthBar: {fileID: 5590638746206350379}
   AttackAnimationType: {fileID: 11400000, guid: 7336fa906463a3e41992e2efc7f13bb1,
     type: 2}
@@ -138,8 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38bb40429f6413992b882e301f052cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HeroDetailPopupPrefab: {fileID: 1704675142547701131, guid: 38cca4b82ff81914bb675bdb5bb64ce7,
-    type: 3}
   Selectable: {fileID: 4860307585515103724}
 --- !u!1 &8360333240085499629
 GameObject:

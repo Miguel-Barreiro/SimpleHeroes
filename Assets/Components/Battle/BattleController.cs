@@ -15,6 +15,9 @@ namespace Gram.Battle
 
         [SerializeField] private HeroBattleCharacter[] HeroBattleCharacters;
         [SerializeField] private BattleCharacter[] EnemyBattleCharacters;
+
+        [SerializeField] 
+        private BattleResultScreen BattleResultScreen;
         
         private IGameModel _gameModel;
         private IBattleModel _battleModel;
@@ -43,15 +46,28 @@ namespace Gram.Battle
 
         private void ExecuteNewTurn(BattleTurn turn) {
             Debug.Log("new turn " + JsonUtility.ToJson(turn));
-
-            ToggleHeroSelection(false);
-
-            ExecutePlayerAttacks(turn, () => {ToggleHeroSelection(true);});
+            StartCoroutine(TurnExecuteCoroutine(turn));
         }
 
-        private void ExecutePlayerAttacks(BattleTurn turn, Action doneCallback) {
+        private IEnumerator TurnExecuteCoroutine(BattleTurn turn) {
+            ToggleHeroSelection(false);
+            
+            bool executingAttacks = true;
+            ExecuteAttacks(turn, () => { executingAttacks = false; });
 
-            HeroBattleCharacter attackingHero = GetHeroCharacterByNameId(turn.HeroNameIdAttack);
+            while ( executingAttacks) {
+                yield return null;
+            }
+            
+            if (turn.BattleEnd) {
+                BattleResultScreen.ShowResult(turn);
+            }
+            ToggleHeroSelection(true);
+        }
+
+        private void ExecuteAttacks(BattleTurn turn, Action doneCallback) {
+
+            HeroBattleCharacter attackingHero = GetHeroBattleCharacterByNameId(turn.HeroNameIdAttack);
             BattleCharacter attackedEnemy = EnemyBattleCharacters[0];
 
             PerformAttack(attackingHero, attackedEnemy, turn.DamageToEnemy, 
@@ -61,14 +77,6 @@ namespace Gram.Battle
                           });
         }
 
-        private HeroBattleCharacter GetHeroCharacterByNameId(string heroNameId) {
-            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
-                if (heroBattleCharacter.GetSelectableHero().GetNameId().Equals(heroNameId)) {
-                    return heroBattleCharacter;
-                }
-            }
-            return null;
-        }
 
         private void ExecuteEnemyAttacks(BattleTurn turn, Action doneCallback) {
             StartCoroutine(EnemyAttacksCoroutine(turn, doneCallback));
@@ -79,7 +87,7 @@ namespace Gram.Battle
                 
                 bool attackInProgress = true;
 
-                BattleCharacter heroAttacked = GetHeroCharacterByNameId(attack.HeroNameId);
+                BattleCharacter heroAttacked = GetHeroBattleCharacterByNameId(attack.HeroNameId);
                 
                 PerformAttack(EnemyBattleCharacters[0], heroAttacked, attack.Damage, 
                               attack.NewHeroHealth, attack.NewHeroHealthPercentage,
@@ -131,7 +139,7 @@ namespace Gram.Battle
         }
 
         private void SetupBattleCharacters() {
-            List<Hero> selectedHeroIndexes = _battleModel.GetHeroes();
+            List<Hero> selectedHeroIndexes = _battleModel.GetParticipatingHeroes();
             for (int i = 0; i < selectedHeroIndexes.Count; i++) {
                 Hero hero = selectedHeroIndexes[i];
                 HeroBattleCharacter heroBattleCharacter = HeroBattleCharacters[i];
@@ -146,6 +154,17 @@ namespace Gram.Battle
             EnemyBattleCharacters[0].Setup(enemy);
         }
 
+        private HeroBattleCharacter GetHeroBattleCharacterByNameId(string heroNameId) {
+            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
+                if (heroBattleCharacter.GetSelectableHero().GetNameId().Equals(heroNameId)) {
+                    return heroBattleCharacter;
+                }
+            }
+            return null;
+        }
+
+        
+        
         private void OnSelectHero(SelectableHero selectableHero) {
             _battleModel.ExecuteTurn(selectableHero.GetNameId());
         }
@@ -165,7 +184,7 @@ namespace Gram.Battle
 
 
         public void GoBackMenuSelection() {
-            _gameModel.Retreat();
+            _gameModel.GotoHeroSelection();
         }
 
         private void OnDestroy() {

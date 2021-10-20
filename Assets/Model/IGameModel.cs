@@ -25,7 +25,7 @@ namespace Gram.Model
         GameLogicState GetCurrentLogicState();
         void StartGameLoop();
         void GoToBattle();
-        void Retreat();
+        void GotoHeroSelection();
     }
     
     public enum GameLogicState
