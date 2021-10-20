@@ -26,8 +26,11 @@ namespace Gram.Core
 
         [Range(0,2)]
         public float AttackPowerPercentageGainedPerLevel = 0.1f;
-        
-        
+
+        [Range(1,20)]
+        public int BattlesNeededForNewHero = 5;
+
+
         private void OnValidate() {
             InitialNumberHeroes = Mathf.Clamp(InitialNumberHeroes, 1, MaximumHeroes);
             MaximumHeroesInBattle = Mathf.Clamp(MaximumHeroesInBattle, 1, MaximumHeroes);

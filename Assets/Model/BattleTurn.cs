@@ -4,22 +4,31 @@ using UnityEngine;
 
 namespace Gram.Model
 {
+    [Serializable]
     public class BattleTurn
     {
+        [SerializeField]
         public string HeroNameIdAttack;
+        [SerializeField]
         public int DamageToEnemy;
+        [SerializeField]
         public int NewEnemyHealth;
+        [SerializeField]
         public float NewEnemyHealthPercentage;
 
         [SerializeField]
         public List<EnemyAttack> EnemyAttacks = new List<EnemyAttack>();
 
+        [SerializeField]
         public bool BattleEnd;
+
+        [SerializeField]
         public BattleResult BattleEndResult;
         
         [Serializable]
         public class BattleResult
         {
+            [SerializeField]
             public bool PlayerWon;
             [SerializeField]
             public List<HeroResult> HeroResults = new List<BattleTurn.HeroResult>();
@@ -30,9 +39,9 @@ namespace Gram.Model
         {
             [SerializeField]
             public Hero Hero;
-            
-            public bool WasDead;
+            [SerializeField]
             public int LevelsGained = 0;
+            [SerializeField]
             public int ExperienceGained = 0;
         }
         
@@ -40,9 +49,13 @@ namespace Gram.Model
         [Serializable]
         public class EnemyAttack
         {
+            [SerializeField]
             public string HeroNameId;
+            [SerializeField]
             public int Damage;
+            [SerializeField]
             public int NewHeroHealth;
+            [SerializeField]
             public float NewHeroHealthPercentage;
         }
         

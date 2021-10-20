@@ -20,11 +20,10 @@ namespace Gram.Model
             _battleModel = battleModel;
             _heroCollectionModel = heroCollectionModel;
             
-            _battleModel.OnNewTurnExecuted += turn => {
-                OnChange?.Invoke();
-            };
+            _battleModel.OnNewTurnExecuted += OnNewBattleTurn;
 
         }
+
 
         //-------------------------------------------------------------------------------
 
@@ -119,7 +118,7 @@ namespace Gram.Model
         
 
         public void StartGameLoop() {
-            OnChange?.Invoke();
+  
             OnLogicStateChange?.Invoke();
         }
 
@@ -139,6 +138,22 @@ namespace Gram.Model
             OnChange?.Invoke();
             OnLogicStateChange?.Invoke();
         }
+        
+        
+        private void OnNewBattleTurn(BattleTurn newTurn) {
+
+            if (newTurn.BattleEnd) {
+                _state.BattleCount++;
+                int numberHeroesToReward = Math.DivRem(_state.BattleCount, _gameDefinitions.BattlesNeededForNewHero, out _state.BattleCount);
+                _heroCollectionModel.AddNewRandomHeroes(numberHeroesToReward);
+    
+                _state.CurrentLogicState = GameLogicState.ShowResult;
+                
+            }
+
+            OnChange?.Invoke();
+        }
+
 
 
         #endregion

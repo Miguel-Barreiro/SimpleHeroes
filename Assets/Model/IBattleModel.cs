@@ -14,8 +14,10 @@ namespace Gram.Model
         
         Enemy GetEnemy();
 
-        List<Hero> GetParticipatingHeroes();
+        Hero[] GetParticipatingHeroes();
         
         void GenerateInitialState();
+        
+        BattleTurn GetLastTurn();
     }
 }

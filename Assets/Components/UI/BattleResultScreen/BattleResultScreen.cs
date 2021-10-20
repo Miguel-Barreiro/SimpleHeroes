@@ -64,7 +64,7 @@ namespace Gram.UI
                 CharacterConfiguration heroData = _characterDatabase.GetCharacterConfigurationById(heroResult.Hero.CharacterNameId);
                 heroResultPanel.Portrait.sprite = heroData.Portrait;
 
-                if (heroResult.WasDead) {
+                if (!heroResult.Hero.IsAlive()) {
                     heroResultPanel.Result.text = "DEAD";
                 }else if (heroResult.LevelsGained > 0) {
                     heroResultPanel.Result.text = $"Level up ({heroResult.Hero.Level})";

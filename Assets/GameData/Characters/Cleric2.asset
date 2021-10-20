@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924c082338e44851b61cb52a112495a0, type: 3}
   m_Name: Cleric2
   m_EditorClassIdentifier: 
-  Portrait: {fileID: 0}
+  Portrait: {fileID: 21300000, guid: 4d74e1d278c84be47833006166b1a959, type: 3}
   BattlePrefab: {fileID: 100030, guid: 7896ac8babea84020a21df2a748173f7, type: 3}
   NameId: clarence
   InitialHealth: 15

@@ -135,13 +135,18 @@ namespace Gram.Battle
                     ToggleHeroSelection(true);
                     ShowBattleScreen();
                     break;
+                case GameLogicState.ShowResult:
+                    // SetupBattleCharacters();
+                    ShowBattleScreen();
+                    BattleResultScreen.ShowResult(_battleModel.GetLastTurn());
+                    break;
             }
         }
 
         private void SetupBattleCharacters() {
-            List<Hero> selectedHeroIndexes = _battleModel.GetParticipatingHeroes();
-            for (int i = 0; i < selectedHeroIndexes.Count; i++) {
-                Hero hero = selectedHeroIndexes[i];
+            Hero[] participatingHeroes = _battleModel.GetParticipatingHeroes();
+            for (int i = 0; i < participatingHeroes.Length; i++) {
+                Hero hero = participatingHeroes[i];
                 HeroBattleCharacter heroBattleCharacter = HeroBattleCharacters[i];
                 heroBattleCharacter.Setup(hero);
                 Vector3 localScale = heroBattleCharacter.GetVisuals().transform.localScale;

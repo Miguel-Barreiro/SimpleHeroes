@@ -10,8 +10,8 @@ namespace Gram.Model
         
         public event GameBasics.SimpleDelegate OnHeroCollectionChange;
         
-        public List<Hero> GetCollectedHeroes() {
-            return _state.HeroesCollected;
+        public Hero[] GetCollectedHeroes() {
+            return _state.HeroesCollected.ToArray();
         }
         public Hero GetHeroByNameId(string nameId) { 
             return _state.HeroesCollected.Find(hero => hero.CharacterNameId.Equals(nameId));
@@ -20,14 +20,14 @@ namespace Gram.Model
 
         //to reduce garbage
         private readonly List<Hero> _getHeroesByIdResult = new List<Hero>();
-        public  List<Hero> GetHeroesByNameId(List<string> heroNameIds){
+        public Hero[] GetHeroesByNameId(List<string> heroNameIds){
             _getHeroesByIdResult.Clear();
             if (heroNameIds != null) {
                 foreach (string heroNameId in heroNameIds) {
                     _getHeroesByIdResult.Add(GetHeroByNameId(heroNameId));
                 }
             }
-            return _getHeroesByIdResult;
+            return _getHeroesByIdResult.ToArray();
         }
 
 
@@ -35,8 +35,24 @@ namespace Gram.Model
             _state = new State();
             
             int numberHeroes = _gameDefinitions.InitialNumberHeroes;
-            
+
             List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetMultipleRandomHeroCharactersData(numberHeroes);
+            foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
+                _state.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
+            }
+            
+            OnHeroCollectionChange?.Invoke();
+        }
+
+
+        public void AddNewRandomHeroes(int numberHeroes) {
+            
+            List<CharacterConfiguration> excludingList = new List<CharacterConfiguration>();
+            foreach (Hero hero in _state.HeroesCollected) {
+                CharacterConfiguration characterConfiguration = _characterDatabase.GetCharacterConfigurationById(hero.CharacterNameId);
+                excludingList.Add(characterConfiguration);
+            }
+            List<CharacterConfiguration> newHeroCharacters = _characterDatabase.GetMultipleRandomHeroCharactersData(numberHeroes, excludingList);
             foreach (CharacterConfiguration newHeroCharacter in newHeroCharacters) {
                 _state.HeroesCollected.Add(GenerateNewHero(newHeroCharacter));
             }

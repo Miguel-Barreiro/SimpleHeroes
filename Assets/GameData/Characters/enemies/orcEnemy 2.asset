@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 924c082338e44851b61cb52a112495a0, type: 3}
+  m_Name: orcEnemy 2
+  m_EditorClassIdentifier: 
+  Portrait: {fileID: 21300000, guid: 19fc591c9e04916458865f6b9abcbad3, type: 3}
+  BattlePrefab: {fileID: 100012, guid: eb2c568a823f34dfba33a83207dafe90, type: 3}
+  NameId: Ogre2
+  InitialHealth: 35
+  InitialAttackPower: 7
+  History: Very tough opponent
