@@ -1,4 +1,3 @@
-using System;
 using Gram.Core;
 using Gram.Model;
 using Gram.UI.Tooltips;
@@ -6,7 +5,6 @@ using Gram.Utils;
 using Gram.Utils.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 namespace Gram.UI
 {

@@ -15,6 +15,6 @@ MonoBehaviour:
   Portrait: {fileID: 21300000, guid: 901a99cc31fac2748958b60151785fe2, type: 3}
   BattlePrefab: {fileID: 100020, guid: ff666b48d3d694a549f8bf5670f7b88a, type: 3}
   NameId: Peasant 1
-  InitialHealth: 50
+  InitialHealth: 70
   InitialAttackPower: 2
   History: farms well xp

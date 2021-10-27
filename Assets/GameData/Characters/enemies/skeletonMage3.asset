@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100016, guid: d1760707aca6b40ffbecca5efbbc36e6, type: 3}
   NameId: skeleton mage 3
   InitialHealth: 50
-  InitialAttackPower: 30
+  InitialAttackPower: 20
   History: skelly

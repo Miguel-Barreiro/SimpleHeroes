@@ -5,7 +5,6 @@ using Gram.Utils;
 using Gram.Utils.AnimationUtils;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Gram.Battle
 {

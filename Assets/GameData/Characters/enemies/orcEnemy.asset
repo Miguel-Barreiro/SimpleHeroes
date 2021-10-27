@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100028, guid: 47775efaed9da4f22b814cf58dcc27d7, type: 3}
   NameId: deadly Ogre
   InitialHealth: 20
-  InitialAttackPower: 222
+  InitialAttackPower: 138
   History: Very tough opponent

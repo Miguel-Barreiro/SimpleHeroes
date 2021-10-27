@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100002, guid: 20ba659e37d3f4b14befc93124a9c053, type: 3}
   NameId: Eva
   InitialHealth: 15
-  InitialAttackPower: 10
+  InitialAttackPower: 20
   History: she puts u in a spell

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,7 +9,6 @@ namespace Gram.Core
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "CharacterDatabase", order = 0)]
     public class CharacterDatabase : ScriptableObject, ICharacterDatabase
     {
-        //TODO: add easy to access collection for access any config by id
 
         [SerializeField]
         private List<CharacterConfiguration> HeroCharacters;
@@ -40,8 +40,6 @@ namespace Gram.Core
 
         
         private readonly Dictionary<string, CharacterConfiguration> _characterConfigurationsById = new Dictionary<string, CharacterConfiguration>();
-
-        
         
 
         public CharacterConfiguration GetCharacterConfigurationById(string id) {
@@ -78,23 +76,29 @@ namespace Gram.Core
             }
         }
 
-        public void Awake() { CreateCharacterConfigurationDictionary(); }
 
+        //-------------------------------------------------------------------------------
+
+        #region Setup
+
+        public void Awake() { CreateCharacterConfigurationDictionary(); }
+        
+#if UNITY_EDITOR
+        private void OnEnable() {
+            // use platform dependent compilation so it only exists in editor, otherwise it'll break the build
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                CreateCharacterConfigurationDictionary();
+        }
+#endif
         
         private void CreateCharacterConfigurationDictionary() {
             foreach (CharacterConfiguration characterConfiguration in AllCharacters) {
                 _characterConfigurationsById.Add(characterConfiguration.NameId, characterConfiguration);
             }
         }
-
         
-#if UNITY_EDITOR
-        private void OnEnable() {
-            // use platform dependent compilation so it only exists in editor, otherwise it'll break the build
-            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-                CreateCharacterConfigurationDictionary();
-        }
-#endif
+
+        #endregion
 
     }
 }

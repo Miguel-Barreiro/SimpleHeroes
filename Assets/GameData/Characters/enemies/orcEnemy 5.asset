@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100012, guid: 9886316d8a129475eb7dc444e22fac83, type: 3}
   NameId: Ogre 5
   InitialHealth: 100
-  InitialAttackPower: 15
+  InitialAttackPower: 5
   History: Very tough opponent

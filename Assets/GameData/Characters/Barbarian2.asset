@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100032, guid: e68a39fc88f9644c881f6e31aa8096e4, type: 3}
   NameId: Barbara
   InitialHealth: 20
-  InitialAttackPower: 4
+  InitialAttackPower: 9
   History: Always been very tough

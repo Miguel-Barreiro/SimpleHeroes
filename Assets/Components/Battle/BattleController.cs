@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Gram.Core;
 using Gram.Model;
 using Gram.UI;
 using Gram.Utils;
@@ -21,8 +19,9 @@ namespace Gram.Battle
         
         private IGameModel _gameModel;
         private IBattleModel _battleModel;
-        private ICharacterDatabase _characterDatabase;
 
+        
+        
         private void Start() {
             _gameModel.OnLogicStateChange += OnLogicStateChange;
             
@@ -34,8 +33,6 @@ namespace Gram.Battle
         }
 
         private void Awake() {
-            _characterDatabase = BasicDependencyInjector.Instance().GetObjectByType<ICharacterDatabase>();
-            
             _battleModel = BasicDependencyInjector.Instance().GetObjectByType<IBattleModel>();
             _gameModel = BasicDependencyInjector.Instance().GetObjectByType<IGameModel>();
         }
@@ -45,7 +42,7 @@ namespace Gram.Battle
         #region Turn Execution
 
         private void ExecuteNewTurn(BattleTurn turn) {
-            Debug.Log("new turn " + JsonUtility.ToJson(turn));
+            // Debug.Log("new turn " + JsonUtility.ToJson(turn));
             StartCoroutine(TurnExecuteCoroutine(turn));
         }
 
@@ -84,11 +81,10 @@ namespace Gram.Battle
         
         private IEnumerator EnemyAttacksCoroutine(BattleTurn turn, Action doneCallback) {
             foreach (BattleTurn.EnemyAttack attack in turn.EnemyAttacks) {
-                
-                bool attackInProgress = true;
 
                 BattleCharacter heroAttacked = GetHeroBattleCharacterByNameId(attack.HeroNameId);
                 
+                bool attackInProgress = true;
                 PerformAttack(EnemyBattleCharacters[0], heroAttacked, attack.Damage, 
                               attack.NewHeroHealth, attack.NewHeroHealthPercentage,
                               () => {
@@ -118,6 +114,36 @@ namespace Gram.Battle
         #endregion
 
 
+        private void SetupBattleCharacters() {
+            Hero[] participatingHeroes = _battleModel.GetParticipatingHeroes();
+            for (int i = 0; i < participatingHeroes.Length; i++) {
+                Hero hero = participatingHeroes[i];
+                HeroBattleCharacter heroBattleCharacter = HeroBattleCharacters[i];
+                heroBattleCharacter.Setup(hero);
+                Vector3 localScale = heroBattleCharacter.GetVisuals().transform.localScale;
+                heroBattleCharacter.GetVisuals().transform.localScale = new Vector3(-localScale.x, localScale.y, localScale.z);
+            }
+
+            Enemy enemy =_battleModel.GetEnemy();
+            
+            EnemyBattleCharacters[0].Setup(enemy);
+        }
+
+        private HeroBattleCharacter GetHeroBattleCharacterByNameId(string heroNameId) {
+            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
+                if (heroBattleCharacter.GetSelectableHero().GetNameId().Equals(heroNameId)) {
+                    return heroBattleCharacter;
+                }
+            }
+            return null;
+        }
+
+
+        //-------------------------------------------------------------------------------
+
+        #region Game Event handling
+
+
         private void OnLogicStateChange() {
             GameLogicState logicState = _gameModel.GetCurrentLogicState();
             switch (logicState) {
@@ -136,39 +162,12 @@ namespace Gram.Battle
                     ShowBattleScreen();
                     break;
                 case GameLogicState.ShowResult:
-                    // SetupBattleCharacters();
                     ShowBattleScreen();
                     BattleResultScreen.ShowResult(_battleModel.GetLastTurn());
                     break;
             }
         }
 
-        private void SetupBattleCharacters() {
-            Hero[] participatingHeroes = _battleModel.GetParticipatingHeroes();
-            for (int i = 0; i < participatingHeroes.Length; i++) {
-                Hero hero = participatingHeroes[i];
-                HeroBattleCharacter heroBattleCharacter = HeroBattleCharacters[i];
-                heroBattleCharacter.Setup(hero);
-                Vector3 localScale = heroBattleCharacter.GetVisuals().transform.localScale;
-                heroBattleCharacter.GetVisuals().transform.localScale = new Vector3(-localScale.x, localScale.y, localScale.z);
-            }
-
-            Enemy enemy =_battleModel.GetEnemy();
-
-
-            EnemyBattleCharacters[0].Setup(enemy);
-        }
-
-        private HeroBattleCharacter GetHeroBattleCharacterByNameId(string heroNameId) {
-            foreach (HeroBattleCharacter heroBattleCharacter in HeroBattleCharacters) {
-                if (heroBattleCharacter.GetSelectableHero().GetNameId().Equals(heroNameId)) {
-                    return heroBattleCharacter;
-                }
-            }
-            return null;
-        }
-
-        
         
         private void OnSelectHero(SelectableHero selectableHero) {
             _battleModel.ExecuteTurn(selectableHero.GetNameId());
@@ -197,5 +196,7 @@ namespace Gram.Battle
                 heroBattleCharacter.GetSelectableHero().OnSelected -= OnSelectHero;
             }
         }
+
+        #endregion
     }
 }

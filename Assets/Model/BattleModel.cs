@@ -42,7 +42,8 @@ namespace Gram.Model
 
             FillParticipatingHeroesCache();
 
-            foreach (Hero hero in _participatingHeroesCache) {
+            Hero[] participatingHeroes = GetParticipatingHeroes();
+            foreach (Hero hero in participatingHeroes) {
                 hero.Heal();
             }
         }
@@ -57,9 +58,7 @@ namespace Gram.Model
         }
         
 
-        //to reduce garbage/ improve perfomance
         private readonly List<Hero> _participatingHeroesCache = new List<Hero>();
-
         private void FillParticipatingHeroesCache() {
             _participatingHeroesCache.Clear();
             Hero[] participatingHeroes = _heroCollectionModel.GetHeroesByNameId(_state.ParticipatingHeroNameIds);

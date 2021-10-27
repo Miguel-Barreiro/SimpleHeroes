@@ -16,5 +16,5 @@ MonoBehaviour:
   BattlePrefab: {fileID: 100020, guid: 364ae83ad7b1c4fce8735ead4a02c20e, type: 3}
   NameId: Knight
   InitialHealth: 25
-  InitialAttackPower: 3
+  InitialAttackPower: 7
   History: saves princesses

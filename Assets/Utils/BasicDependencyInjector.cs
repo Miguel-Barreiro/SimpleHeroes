@@ -6,9 +6,9 @@ using Object = System.Object;
 namespace Gram.Utils
 {
     
-    // seeing we cannot use an external dependency injector I created a very very basic one just as an example 
+    // seeing we cannot use any external libraries I created a very very basic one just as an example 
     // for time saving as we dont want to create a full library  we are going to use a singleton, get all bindings from here and 
-    // monobehaviours will need to ask for their dependencies
+    // monobehaviours will need to ask for their dependencies instead of a true injection
     public class BasicDependencyInjector
     {
         
